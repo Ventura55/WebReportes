@@ -1,0 +1,33 @@
+package com.quiros.gestorProyectos.service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.quiros.gestorProyectos.entity.AppProyect;
+import com.quiros.gestorProyectos.repository.AppProyectRepository;
+
+@Service
+public class AppProyectDetailsService {
+    private final AppProyectRepository appProyectRepository;
+
+    @Autowired
+    public AppProyectDetailsService(AppProyectRepository appProyectRepository) {
+        this.appProyectRepository = appProyectRepository;
+    }
+
+    public AppProyect createProyect(String proyect, String description, int complete) {
+        AppProyect appProyect = new AppProyect();
+        appProyect.setProyect(proyect);
+        appProyect.setDescription(description);
+        appProyect.setComplete(complete);
+
+        return appProyectRepository.save(appProyect);
+    }
+
+    public void deleteProyectById(Long id) {
+        if (!appProyectRepository.existsById(id)) {
+            throw new RuntimeException("La tarea no existe con Id:" + id);
+        }
+        appProyectRepository.deleteById(id);
+    }
+}

@@ -1,0 +1,90 @@
+.Login {
+    text-align: center;
+}
+
+.Login-header {
+    background-color: #282c34;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: calc(10px + 2vmin);
+    color: white;
+}
+
+.login-box {
+  background-color: #3c4053;
+  border-radius: 12px;
+  padding: 16px;
+  width: 400px;
+  height: 500px;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.input-wrapper {
+    background-color: #3a3e5a;
+    border-radius: 12px;
+    overflow: hidden;
+    width: 280px;
+    color: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.input-group {
+    background-color: #3b3b4f;
+    border-radius: 8px;
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    width: 260px;
+}
+
+.input-group input {
+    background: transparent;
+    border: none;
+    outline: none;
+    color: white;
+    width: 100%;
+    font-size: 14px;
+
+    ::placeholder {
+        color: rgba(255, 255, 255, 0.6);
+    }
+}
+
+.separator {
+    height: 1px;
+    background-color: rgba(255, 255, 255, 0.3);
+    margin: 0 16px;
+}
+
+.divider {
+    width: 1px;
+    height: 20px;
+    background-color: rgba(255, 255, 255, 0.3);
+    margin: 0 12px;
+}
+
+.icon {
+    margin-right: 12px;
+    color: #ccc;
+    width: 18px;
+    height: 18px;
+}
+
+.login-button {
+    margin-top: 16px;
+    width: 260px;
+    padding: 20px;
+    background-color: #4aa747;
+    color: white;
+    border: none;
+    border-radius: 30px;
+    font-weight: bold;
+    cursor: pointer;
+}
