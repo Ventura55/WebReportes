@@ -1,18 +1,17 @@
-# frontend/Dockerfile (CRA)
-FROM node:20-alpine AS build
+# ---------- Stage 1: Build ----------
+FROM node:18-alpine AS build
 WORKDIR /app
+
 COPY package*.json ./
-# tras COPY package*.json ./
-RUN npm install
+RUN npm ci || npm install
+
 COPY . .
-# añade esta línea ANTES del build:
 RUN npm install lucide-react
-RUN npm run build
+RUN npm run build   # CRA genera /app/build
 
-RUN npm install
-COPY . .
-RUN npm run build   # CRA => genera /build
-
+# ---------- Stage 2: Nginx ----------
 FROM nginx:1.27-alpine
-COPY --from=build /app/build /usr/share/nginx/html
+# OJO: fuente (en el stage build) → destino (en Nginx). Termina en /
+COPY --from=build /app/build/ /usr/share/nginx/html/
+COPY ./nginx.conf /etc/nginx/conf.d/default.conf
 EXPOSE 80
