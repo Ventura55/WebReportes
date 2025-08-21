@@ -6,12 +6,10 @@ COPY package*.json ./
 RUN npm ci || npm install
 
 COPY . .
-RUN npm install lucide-react
 RUN npm run build   # CRA genera /app/build
 
 # ---------- Stage 2: Nginx ----------
 FROM nginx:1.27-alpine
-# OJO: fuente (en el stage build) → destino (en Nginx). Termina en /
 COPY --from=build /app/build/ /usr/share/nginx/html/
 COPY ./nginx.conf /etc/nginx/conf.d/default.conf
 EXPOSE 80
