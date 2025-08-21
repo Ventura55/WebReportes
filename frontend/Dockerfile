@@ -6,6 +6,7 @@ COPY package*.json ./
 RUN npm ci || npm install
 
 COPY . .
+RUN chmod -R 755 node_modules/.bin
 RUN npm run build   # CRA genera /app/build
 
 # ---------- Stage 2: Nginx ----------
