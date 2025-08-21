@@ -30,12 +30,12 @@ function AppMain() {
     const auth = { username, password };
 
     Promise.all([
-      axios.get('http://localhost:8081/api/user/info/all', { auth }),
-      axios.get('http://localhost:8081/api/history/proyect', { auth }),
-      axios.get('http://localhost:8081/api/history/task', { auth }),
-      axios.get('http://localhost:8081/api/history/report', { auth }),
-      axios.get('http://localhost:8081/api/history/report/complete', { auth }),
-      axios.get('http://localhost:8081/api/user/info', { auth })
+      axios.get('http://backend:8081/api/user/info/all', { auth }),
+      axios.get('http://backend:8081/api/history/proyect', { auth }),
+      axios.get('http://backend:8081/api/history/task', { auth }),
+      axios.get('http://backend:8081/api/history/report', { auth }),
+      axios.get('http://backend:8081/api/history/report/complete', { auth }),
+      axios.get('http://backend:8081/api/user/info', { auth })
     ])
       .then(([userRes, proyectRes, taskRes, reportRes, logRes, userInfoRes]) => {
         const normalizedData = proyectRes.data.map(p => ({
@@ -146,7 +146,7 @@ function AppMain() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios.post('http://localhost:8081/api/history/create/history', formData, {
+    axios.post('http://backend:8081/api/history/create/history', formData, {
       auth: {
         username: 'ventu',
         password: '123'
@@ -157,7 +157,7 @@ function AppMain() {
       if (res.data.newHistory) {
         setHistorial(prev => [...prev, res.data.newHistory]);
       } else {
-        axios.get('http://localhost:8081/api/history', {
+        axios.get('http://backend:8081/api/history', {
           auth: { username: 'ventu', password: '123' }
         }).then(res => {
           setHistorial(res.data);
@@ -187,7 +187,7 @@ function AppMain() {
 
   const handleSubmitProyect = (e) => {
     e.preventDefault();
-    axios.post('http://localhost:8081/api/history/create/proyect', formProyect, {
+    axios.post('http://backend:8081/api/history/create/proyect', formProyect, {
       auth: {
         username: 'ventu',
         password: '123'
@@ -198,7 +198,7 @@ function AppMain() {
       if (res.data.newProyect) {
         setProyects(prev => [...prev, res.data.newProyect]);
       } else {
-        axios.get('http://localhost:8081/api/history/proyect', {
+        axios.get('http://backend:8081/api/history/proyect', {
           auth: { username: 'ventu', password: '123' }
         }).then(res => {
           setProyects(res.data);
@@ -214,7 +214,7 @@ function AppMain() {
   }
 
   const handleDeleteProyect = (id) => {
-    axios.delete(`http://localhost:8081/api/history/delete/proyect/${id}`, {
+    axios.delete(`http://backend:8081/api/history/delete/proyect/${id}`, {
       auth: {
         username: 'ventu',
         password: '123'
@@ -227,7 +227,7 @@ function AppMain() {
   };
 
   const updateProyectStatus = (id, newStatus) => {
-    axios.put(`http://localhost:8081/api/history/update/proyect/${id}`,
+    axios.put(`http://backend:8081/api/history/update/proyect/${id}`,
       { completed: newStatus ? 1 : 0 },
       {
         auth: {
@@ -256,7 +256,7 @@ function AppMain() {
 
   const handleSubmitTask = (e) => {
     e.preventDefault();
-    axios.post('http://localhost:8081/api/history/create/task', formTask, {
+    axios.post('http://backend:8081/api/history/create/task', formTask, {
       auth: {
         username: 'ventu',
         password: '123'
@@ -267,7 +267,7 @@ function AppMain() {
       if (res.data.newTask) {
         setTask(prev => [...prev, res.data.newTask]);
       } else {
-        axios.get('http://localhost:8081/api/history/task', {
+        axios.get('http://backend:8081/api/history/task', {
           auth: { username: 'ventu', password: '123' }
         }).then(res => {
           setTask(res.data);
@@ -283,7 +283,7 @@ function AppMain() {
   }
 
   const handleDeleteTask = (id) => {
-    axios.delete(`http://localhost:8081/api/history/delete/task/${id}`, {
+    axios.delete(`http://backend:8081/api/history/delete/task/${id}`, {
       auth: {
         username: 'ventu',
         password: '123'
@@ -303,7 +303,7 @@ function AppMain() {
 
   const handleSubmitReport = (e) => {
     e.preventDefault();
-    axios.post('http://localhost:8081/api/history/create/report', formReport, {
+    axios.post('http://backend:8081/api/history/create/report', formReport, {
       auth: {
         username: 'ventu',
         password: '123'
@@ -314,7 +314,7 @@ function AppMain() {
       if (res.data.newReport) {
         setReport(prev => [...prev, res.data.newReport]);
       } else {
-        axios.get('http://localhost:8081/api/history/report', {
+        axios.get('http://backend:8081/api/history/report', {
           auth: { username: 'ventu', password: '123' }
         }).then(res => {
           setReport(res.data);
@@ -331,7 +331,7 @@ function AppMain() {
 
   const handleCompleteReport = async (id) => {
     try {
-      await axios.post(`http://localhost:8081/api/history/complete/report/${id}`, {}, {
+      await axios.post(`http://backend:8081/api/history/complete/report/${id}`, {}, {
         auth: {
           username: 'ventu',
           password: '123'
@@ -343,7 +343,7 @@ function AppMain() {
         if (res.data.newCompleteReport) {
           setLog(prev => [...prev, res.data.newCompleteReport]);
         } else {
-          axios.get('http://localhost:8081/api/history/report/complete', {
+          axios.get('http://backend:8081/api/history/report/complete', {
             auth: { username: 'ventu', password: '123' }
           }).then(rese => {
             setLog(rese.data);
@@ -366,7 +366,7 @@ function AppMain() {
 
   const handleSubmitUser = (e) => {
     e.preventDefault();
-    axios.post('http://localhost:8081/api/user/create/user', formUser, {
+    axios.post('http://backend:8081/api/user/create/user', formUser, {
       auth: {
         username: 'ventu',
         password: '123'
@@ -386,7 +386,7 @@ function AppMain() {
 
   // Editar usuario
   const handleSaveUser = () => {
-    axios.put('http://localhost:8081/api/user/update', editableUser, {
+    axios.put('http://backend:8081/api/user/update', editableUser, {
       auth: {
         username,
         password
@@ -404,7 +404,7 @@ function AppMain() {
 
   // Cargar los datos al cargar la página
   useEffect(() => {
-    axios.get('http://localhost:8081/api/history', {
+    axios.get('http://backend:8081/api/history', {
       auth: { username, password }
     })
       .then(res => {
