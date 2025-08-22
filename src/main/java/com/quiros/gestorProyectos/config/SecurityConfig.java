@@ -32,7 +32,7 @@ public class SecurityConfig {
         http.cors(withDefaults())
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/health", "/create", "/auth/login").permitAll()
+                        .requestMatchers("/", "/health", "/create", "/api/auth/login").permitAll()
                         .anyRequest().authenticated())
                 .httpBasic(withDefaults());
 

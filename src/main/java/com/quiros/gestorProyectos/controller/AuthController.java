@@ -15,7 +15,7 @@ import org.springframework.security.core.Authentication;
 import com.quiros.gestorProyectos.request.LoginRequest;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/api/auth")
 public class AuthController {
     
     @Autowired
