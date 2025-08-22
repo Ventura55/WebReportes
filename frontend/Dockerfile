@@ -13,5 +13,4 @@ RUN npm run build   # CRA genera /app/build
 FROM nginx:1.27-alpine
 COPY --from=build /app/build/ /usr/share/nginx/html/
 COPY ./nginx.conf /etc/nginx/conf.d/default.conf
-EXPOSE 5002
-CMD ["serve", "-s", "build", "-l", "5002"]
+EXPOSE 80
