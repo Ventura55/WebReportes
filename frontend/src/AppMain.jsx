@@ -27,7 +27,7 @@ function AppMain() {
   const [infoUser, setInfoUser] = useState([]);
 
   useEffect(() => {
-    const auth = { username, password };
+    const auth = { username, password };  
 
     Promise.all([
       axios.get('/api/user/info/all', { auth }),
