@@ -13,7 +13,7 @@ function LoginForm({ onLoginSuccess }) {
         e.preventDefault();
         setError("");
 
-        const response = await fetch("/api/auth/login", {
+        const response = await fetch("http://tareas.quirosingenieria.es:8081/auth/login", {
             method: "POST",
             headers: { "Content-Type": "application/json"},
             body: JSON.stringify({ username, password })
