@@ -4,7 +4,6 @@ services:
     build:
       context: .
       dockerfile: src/Dockerfile
-    image: gestor-web-frontend:latest
     ports:
       - "8081:8081"
     environment:
