@@ -30,7 +30,7 @@ import com.quiros.gestorProyectos.service.AppTaskDetailsService;
 
 @RestController
 @RequestMapping("/api/history")
-@CrossOrigin(origins = "http://tareas.quirosingenieria.es:80")
+@CrossOrigin(origins = "http://tareas.quirosingenieria.es:5002")
 public class AppHistoryController {
 
     @Autowired
