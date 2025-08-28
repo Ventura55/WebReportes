@@ -13,7 +13,7 @@ function LoginForm({ onLoginSuccess }) {
         e.preventDefault();
         setError("");
 
-        const response = await fetch("/auth/login", {
+        const response = await fetch("/api/auth/login", {
             method: "POST",
             headers: { "Content-Type": "application/json"},
             body: JSON.stringify({ username, password })
@@ -31,7 +31,7 @@ function LoginForm({ onLoginSuccess }) {
             <header className="Login-header">
                 <form onSubmit={handleLogin}>
                     <div className="login-box">
-                        
+                        <img src="/logoQuiros.png" with="280px" />
                         <br></br>
                         <div className="input-wrapper">
                             <div className="input-group">
@@ -59,7 +59,7 @@ function LoginForm({ onLoginSuccess }) {
                             </div>
                         </div>
                         <br />
-                        <button className="login-button">salir</button>
+                        <button className="login-button">ENTRAR</button>
                         {error && <p style={{ color: "red" }}>{error}</p>}
                     </div>
                 </form>
