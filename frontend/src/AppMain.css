@@ -1,6 +1,15 @@
 .Main {
-    text-align: center;
+    display: flex;
+    flex-direction: column; /* Header arriba, main debajo */
+    min-height: 100vh;
 }
+
+main {
+    display: flex;   /* Menú y body lado a lado */
+    flex: 1;         /* Ocupa el resto del espacio */
+    min-height: 100vh;
+}
+
 
 .Main-header {
     background-color: #3c4053;
@@ -12,17 +21,15 @@
 }
 
 .Main-menu {
-    background-color: #3c4053;
-    color: white;
-    padding-top: 30px;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;   /* Siempre ocupa toda la altura */
     width: 13%;
-    float: left;
-    padding-bottom: 0;
+    padding-top: 30px;
     border-right: 1px solid black;
     transition: transform 0.3s ease-in-out;
-    min-height: 100vh;
-    height: auto;
-    padding-bottom: 0;
+    background-color: #3c4053;
+    color: white;
 }
 
 /* Modo móvil */
@@ -91,7 +98,8 @@
 .Main-body {
     background-color: rgba(221, 221, 221, 0.171);
     text-align: right;
-    padding-bottom: 100%;
+    flex: 1;
+    overflow-y: auto;
 }
 
 .Main-body button {
@@ -127,7 +135,7 @@
 }
 
 .table {
-    width: 80%;
+    width: calc(100% - 40px);
     margin: 2rem auto;
     border-collapse: collapse;
     font-family: 'Segoe UI', sans-serif;
@@ -445,6 +453,7 @@ select {
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
     z-index: 100;
     padding-bottom: 15px;
+    text-align: center;
 }
 
 .dropdown button {
