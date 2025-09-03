@@ -27,7 +27,7 @@ function AppMain() {
   const [infoUser, setInfoUser] = useState([]);
 
   useEffect(() => {
-    const auth = { username, password };  
+    const auth = { username, password };
 
     Promise.all([
       axios.get('http://tareas.quirosingenieria.es:8081/api/user/info/all', { auth }),
@@ -739,7 +739,16 @@ function AppMain() {
                       <td>{log.company}</td>
                       <td>{log.location}</td>
                       <td>{log.date}</td>
-                      <td>{log.description}</td>
+                      <td><button onClick={() => setShowDescription(log)}><BookOpenText /></button></td>
+                      {showDescription && (
+                        <div className='modal-overlay'>
+                          <div className='modal'>
+                            <h2>Descripcion {log.description}</h2>
+                            <textarea readOnly className='modal-textarea' value={showDescription.description} />
+                            <button onClick={() => setShowDescription(false)}>Cancelar</button>
+                          </div>
+                        </div>
+                      )}
                     </tr>
                   ))}
                 </tbody>
