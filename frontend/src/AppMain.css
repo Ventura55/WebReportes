@@ -170,7 +170,6 @@ main {
 .table button {
     float: none;            /* Quitar float */
     display: inline-flex;    /* Mantiene flex para iconos si los hay */
-    justify-content: center; /* Centra el contenido interno */
 }
 
 @media screen and (max-width: 768px) {
@@ -454,6 +453,7 @@ select {
     padding: 10px;
     right: 0;
     background-color: #3c4053;
+    text-align: center;
     border: 1px solid black;
     border-radius: 5px;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
