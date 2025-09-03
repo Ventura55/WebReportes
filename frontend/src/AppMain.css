@@ -17,9 +17,12 @@
     padding-top: 30px;
     width: 13%;
     float: left;
-    padding-bottom: 100%;
+    padding-bottom: 0;
     border-right: 1px solid black;
     transition: transform 0.3s ease-in-out;
+    min-height: 100vh;
+    height: auto;
+    padding-bottom: 0;
 }
 
 /* Modo móvil */
