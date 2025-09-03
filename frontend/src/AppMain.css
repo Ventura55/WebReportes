@@ -167,6 +167,12 @@ main {
     max-width: 300px;
 }
 
+.table button {
+    float: none;            /* Quitar float */
+    display: inline-flex;    /* Mantiene flex para iconos si los hay */
+    justify-content: center; /* Centra el contenido interno */
+}
+
 @media screen and (max-width: 768px) {
 
     .table thead td,

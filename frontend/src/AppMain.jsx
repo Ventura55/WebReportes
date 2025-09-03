@@ -743,7 +743,7 @@ function AppMain() {
                       {showDescription && (
                         <div className='modal-overlay'>
                           <div className='modal'>
-                            <h2>Descripcion {log.description}</h2>
+                            <h2>Descripcion {log.company}</h2>
                             <textarea readOnly className='modal-textarea' value={showDescription.description} />
                             <button onClick={() => setShowDescription(false)}>Cancelar</button>
                           </div>
