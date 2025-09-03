@@ -696,7 +696,7 @@ function AppMain() {
                           <div className='modal'>
                             <h2>Descripcion {reports.company}</h2>
                             <textarea readOnly className='modal-textarea' value={showDescription.description} />
-                            <button onClick={() => setShowDescription(false)}>Cancelar</button>
+                            <button className='modal-cancel' onClick={() => setShowDescription(false)}>Cancelar</button>
                           </div>
                         </div>
                       )}
@@ -708,7 +708,7 @@ function AppMain() {
                             <button onClick={fillPdfControl}><ClipboardPenLine />Informe formacion</button>
                             <button onClick={() => fillPdfParte(reports)}><ClipboardPen />Parte averia</button>
                             <button onClick={() => window.open('/files/acta-recepcion.pdf', '_blank')}><Clipboard />Acta recepcion</button>
-                            <button onClick={() => setShowInform(false)}>Cancelar</button>
+                            <button className='modal-cancel' onClick={() => setShowInform(false)}>Cancelar</button>
                           </div>
                         </div>
                       )}
@@ -745,7 +745,7 @@ function AppMain() {
                           <div className='modal'>
                             <h2>Descripcion {log.company}</h2>
                             <textarea readOnly className='modal-textarea' value={showDescription.description} />
-                            <button onClick={() => setShowDescription(false)}>Cancelar</button>
+                            <button className='modal-cancel' onClick={() => setShowDescription(false)}>Cancelar</button>
                           </div>
                         </div>
                       )}

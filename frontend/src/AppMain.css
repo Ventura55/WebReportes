@@ -1,12 +1,15 @@
 .Main {
     display: flex;
-    flex-direction: column; /* Header arriba, main debajo */
+    flex-direction: column;
+    /* Header arriba, main debajo */
     min-height: 100vh;
 }
 
 main {
-    display: flex;   /* Menú y body lado a lado */
-    flex: 1;         /* Ocupa el resto del espacio */
+    display: flex;
+    /* Menú y body lado a lado */
+    flex: 1;
+    /* Ocupa el resto del espacio */
     min-height: 100vh;
 }
 
@@ -23,7 +26,8 @@ main {
 .Main-menu {
     display: flex;
     flex-direction: column;
-    min-height: 100vh;   /* Siempre ocupa toda la altura */
+    min-height: 100vh;
+    /* Siempre ocupa toda la altura */
     width: 13%;
     padding-top: 30px;
     border-right: 1px solid black;
@@ -66,9 +70,9 @@ main {
 }
 
 @media (min-width: 768px) {
-  .close-mobile-menu {
-    display: none;
-  }
+    .close-mobile-menu {
+        display: none;
+    }
 }
 
 .Main-menu button {
@@ -168,8 +172,10 @@ main {
 }
 
 .table button {
-    float: none;            /* Quitar float */
-    display: inline-flex;    /* Mantiene flex para iconos si los hay */
+    float: none;
+    /* Quitar float */
+    display: inline-flex;
+    /* Mantiene flex para iconos si los hay */
 }
 
 @media screen and (max-width: 768px) {
@@ -328,6 +334,24 @@ select {
     margin-right: 10px;
 }
 
+.modal-cancel {
+    margin-bottom: 10px;
+    margin-right: 20px;
+    margin-top: 10px;
+    display: flex;
+    float: right;
+    align-items: center;
+    gap: 3px;
+    padding: 3px 10px;
+    font-size: 12px;
+    border: 1px solid #ccc;
+    background-color: white;
+    border-radius: 6px;
+    color: #333;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
 /* Semaforo reportes */
 .priority-selector {
     display: flex;
@@ -395,20 +419,20 @@ select {
 
 /* Gestion Cuenta */
 .info-container {
-  background: #fff;
-  border-radius: 8px;
-  padding: 20px;
-  max-width: 600px;
-  margin: 0 auto;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    background: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    max-width: 600px;
+    margin: 0 auto;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .info-section {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 12px 0;
-  border-bottom: 1px solid #ddd;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-bottom: 1px solid #ddd;
 }
 
 .button-section {
@@ -426,18 +450,18 @@ select {
 }
 
 .info-label {
-  font-weight: bold;
-  color: #555;
+    font-weight: bold;
+    color: #555;
 }
 
 .info-value {
-  color: #333;
+    color: #333;
 }
 
 .profile-pic {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
 }
 
 
