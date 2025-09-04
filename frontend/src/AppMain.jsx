@@ -502,11 +502,11 @@ function AppMain() {
           {active === "registro" && (
             <>
               <button onClick={() => setShowForm(true)}><FilePlus />Añadir registro</button>
-              {infoUser.rol === "Admin" (
+              {infoUser.rol === "Admin" && (
                 <button onClick={() => setActive("proyectos")}><FileCheck />Ver Proyectos</button>
               )}
 
-              {infoUser.rol === "Admin" (
+              {infoUser.rol === "Admin" && (
                 <button onClick={() => setActive("tareas")}><Plus />Ver Tareas</button>
               )}
 
