@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './AppMain.css'
-import { User, Calendar, ClipboardPenLine, Plus, ArrowLeft, Trash2, LogIn, Check, ClipboardList, ClipboardPen, Clipboard, X, BookOpenText, PenBox } from 'lucide-react';
+import { User, Calendar, ClipboardPenLine, Plus, ArrowLeft, Trash2, LogIn, Check, ClipboardList, ClipboardPen, Clipboard, X, BookOpenText, Logs, FileCheck, FilePlus } from 'lucide-react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios'
 import { PDFDocument } from 'pdf-lib';
@@ -501,9 +501,15 @@ function AppMain() {
         <div className='Main-body'>
           {active === "registro" && (
             <>
-              <button onClick={() => setShowForm(true)}><Plus />Añadir registro</button>
-              <button onClick={() => setActive("proyectos")}><Plus />Ver Proyectos</button>
-              <button onClick={() => setActive("tareas")}><Plus />Ver Tareas</button>
+              <button onClick={() => setShowForm(true)}><FilePlus />Añadir registro</button>
+              {infoUser.rol === "Admin" (
+                <button onClick={() => setActive("proyectos")}><FileCheck />Ver Proyectos</button>
+              )}
+
+              {infoUser.rol === "Admin" (
+                <button onClick={() => setActive("tareas")}><Plus />Ver Tareas</button>
+              )}
+
               <input className='main-input' name='username' placeholder='Buscar usuario' value={usernameFilter} onChange={(e) => setUsernameFilter(e.target.value)}></input>
               {showForm && (
                 <div className='modal-overlay'>
@@ -639,7 +645,7 @@ function AppMain() {
 
           {active === "reportes" && (
             <>
-              <button onClick={() => setActive("logs")}><LogIn></LogIn>Ver Logs</button>
+              <button onClick={() => setActive("logs")}><Logs />Ver Logs</button>
               <button onClick={() => setShowForm(true)}><Plus />Añadir reporte</button>
               {showForm && (
                 <div className='modal-overlay'>
