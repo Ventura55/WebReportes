@@ -794,34 +794,36 @@ function AppMain() {
                   )}
                 </div>
               </div>
-              <div className='info-container'>
-                <h2>Crear Cuenta</h2>
+              {infoUser.rol === "Admin" && (
+                <div className='info-container'>
+                  <h2>Crear Cuenta</h2>
 
-                <form onSubmit={handleSubmitUser}>
-                  <div className="info-section">
-                    <p className="info-label">Nombre</p>
-                    <input className='info-value' name='username' value={formUser.username} onChange={handleChangeUser} required></input>
-                  </div>
+                  <form onSubmit={handleSubmitUser}>
+                    <div className="info-section">
+                      <p className="info-label">Nombre</p>
+                      <input className='info-value' name='username' value={formUser.username} onChange={handleChangeUser} required></input>
+                    </div>
 
-                  <div className="info-section">
-                    <p className="info-label">Correo</p>
-                    <input className='info-value' name='gmail' value={formUser.gmail} onChange={handleChangeUser} required></input>
-                  </div>
+                    <div className="info-section">
+                      <p className="info-label">Correo</p>
+                      <input className='info-value' name='gmail' value={formUser.gmail} onChange={handleChangeUser} required></input>
+                    </div>
 
-                  <div className="info-section">
-                    <p className="info-label">Contraseña</p>
-                    <input className='info-value' name='password' value={formUser.password} onChange={handleChangeUser} required></input>
-                  </div>
+                    <div className="info-section">
+                      <p className="info-label">Contraseña</p>
+                      <input className='info-value' name='password' value={formUser.password} onChange={handleChangeUser} required></input>
+                    </div>
 
-                  <div className="info-section">
-                    <p className="info-label">Rol</p>
-                    <input className='info-value' name='rol' value={formUser.rol} onChange={handleChangeUser} required></input>
-                  </div>
-                  <div className='info-section'>
-                    <button type='submit'>Crear</button>
-                  </div>
-                </form>
-              </div>
+                    <div className="info-section">
+                      <p className="info-label">Rol</p>
+                      <input className='info-value' name='rol' value={formUser.rol} onChange={handleChangeUser} required></input>
+                    </div>
+                    <div className='info-section'>
+                      <button type='submit'>Crear</button>
+                    </div>
+                  </form>
+                </div>
+              )}
             </>
           )}
         </div>
