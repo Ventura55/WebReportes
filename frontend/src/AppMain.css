@@ -335,11 +335,12 @@ select {
 }
 
 .modal-cancel {
-    .modal-cancel {
-  float: none !important;
-  margin: 10px 0;
-  display: inline-block;
-}
+  float: none !important;       /* evita el arrastre a la derecha */
+  display: inline-block !important; 
+  width: auto !important;       /* rompe el 100% heredado */
+  margin: 10px 0 0 0;           /* margen solo arriba */
+  padding: 6px 16px;
+  font-size: 14px;
 }
 
 /* Semaforo reportes */
