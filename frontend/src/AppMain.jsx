@@ -501,13 +501,13 @@ function AppMain() {
         <div className='Main-body'>
           {active === "registro" && (
             <>
-              <button onClick={() => setShowForm(true)}><FilePlus />Añadir registro</button>
+              <button onClick={() => setShowForm(true)}><Plus />Añadir registro</button>
               {infoUser.rol === "Admin" && (
                 <button onClick={() => setActive("proyectos")}><FileCheck />Ver Proyectos</button>
               )}
 
               {infoUser.rol === "Admin" && (
-                <button onClick={() => setActive("tareas")}><Plus />Ver Tareas</button>
+                <button onClick={() => setActive("tareas")}><FilePlus />Ver Tareas</button>
               )}
 
               <input className='main-input' name='username' placeholder='Buscar usuario' value={usernameFilter} onChange={(e) => setUsernameFilter(e.target.value)}></input>
