@@ -1,6 +1,11 @@
 package com.quiros.gestorProyectos.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "historial_proyectos")
@@ -20,7 +25,7 @@ public class AppHistory {
     private String task;
 
     @Column(name = "horas_proyecto")
-    private int hours;
+    private double hours;
 
     @Column(name = "descripcion_proyecto")
     private String description;
@@ -61,11 +66,11 @@ public class AppHistory {
         this.task = task;
     }
 
-    public int getHours() {
+    public double getHours() {
         return hours;
     }
 
-    public void setHours(int hours) {
+    public void setHours(double hours) {
         this.hours = hours;
     }
 

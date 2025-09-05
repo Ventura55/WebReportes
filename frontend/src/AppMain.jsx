@@ -13,8 +13,9 @@ function AppMain() {
   const dropdownRef = useRef(null);
   const [showMenu, setShowMenu] = useState(false);
   const [historial, setHistorial] = useState([]);
-  const [active, setActive] = useState("registro");
+  const [active, setActive] = useState("proyectos");
   const [usernameFilter, setUsernameFilter] = useState('');
+  const [proyectFilter, setProyectFilter] = useState('');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
 
@@ -79,6 +80,9 @@ function AppMain() {
   // Filtrar datos de registro por usuario
   const filteredHistory = historial.filter((item) => item.user.toLowerCase().includes(usernameFilter.toLowerCase()));
 
+  // Filtrar los proyectos por el nombre
+  const filteredProyect = proyects.filter((item) => item.proyect.toLowerCase().includes(proyectFilter.toLowerCase()));
+
   // Nuevo Registro
   const [showForm, setShowForm] = useState(false);
   const [showInform, setShowInform] = useState(false);
@@ -92,7 +96,10 @@ function AppMain() {
   });
 
   const [formProyect, setFormProyect] = useState({
+    priority: '',
     proyect: '',
+    dateStart: `${String(new Date().getMonth() + 1).padStart(2, '0')}-${String(new Date().getDate()).padStart(2, '0')}`,
+    dateEnd: '',
     description: '',
     complete: ''
   });
@@ -494,11 +501,74 @@ function AppMain() {
           {mobileMenuOpen && (
             <button className='close-mobile-menu' onClick={() => setMobileMenuOpen(false)}><X /></button>
           )}
-          <button className={active === "registro" ? "active" : ""} onClick={() => { setActive("registro"); setMobileMenuOpen(false); }}><Calendar />Registro Horas</button>
+          <button className={active === "proyectos" ? "active" : ""} onClick={() => { setActive("proyectos"); setMobileMenuOpen(false); }}><Calendar />Registro Horas</button>
           <button className={active === "reportes" ? "active" : ""} onClick={() => { setActive("reportes"); setMobileMenuOpen(false); }}><ClipboardPenLine />Asistencias</button>
         </div>
 
         <div className='Main-body'>
+          {active === "proyectos" && (
+            <>
+              <button onClick={() => setActive("registro")}><Logs />Ver Logs</button>
+              <button onClick={() => setShowForm(true)}><Plus />Añadir Proyecto</button>
+              <input className='main-input' name='proyect' placeholder='Buscar proyecto' value={proyectFilter} onChange={(e) => setProyectFilter(e.target.value)}></input>
+              {showForm && (
+                <div className='modal-overlay'>
+                  <div className='modal'>
+                    <h2>Nuevo Proyecto</h2>
+                    <form onSubmit={handleSubmitProyect}>
+                      <input name='proyect' placeholder='Proyecto' value={formProyect.proyect} onChange={handleChangeProyect} required />
+                      <input type='hidden' name='dateStart' value={formProyect.dateStart} onChange={handleChangeProyect} />
+                      <input type='date' name='dateEnd' placeholder='Fecha de entrega' value={formProyect.dateEnd} onChange={handleChangeProyect} required />
+                      <div className='priority-row'>
+                        <span className='priority-label'>Prioridad:</span>
+                        <div className='priority-selector'>
+                          <div className={`priority-circle red ${formProyect.priority === 'alta' ? 'selected' : ''}`} onClick={() => setFormProyect({ ...formProyect, priority: 'alta' })} title="Alta"></div>
+                          <div className={`priority-circle yellow ${formProyect.priority === 'media' ? 'selected' : ''}`} onClick={() => setFormProyect({ ...formProyect, priority: 'media' })} title='Media'></div>
+                          <div className={`priority-circle green ${formProyect.priority === 'baja' ? 'selected' : ''}`} onClick={() => setFormProyect({ ...formProyect, priority: 'baja' })} title='Baja'></div>
+                        </div>
+                      </div>
+                      <input name='description' placeholder='Descripcion' value={formProyect.description} onChange={handleChangeProyect} required />
+                      <input type='hidden' name='priority' value={formProyect.priority} />
+                      <button type='submit'>Guardar</button>
+                      <button type='button' onClick={() => setShowForm(false)}>Cancelar</button>
+                    </form>
+                  </div>
+                </div>
+              )}
+              <table className='table'>
+                <thead>
+                  <tr>
+                    <td></td>
+                    <td>Proyecto</td>
+                    <td>Inicio</td>
+                    <td>Previsto</td>
+                    <td>Descripcion</td>
+                    <td>Completar</td>
+                    <td></td>
+                  </tr>
+                </thead>
+                <tbody>
+                  {[...filteredProyect].sort((a,b) => {
+                    const getPriority = (p) => priorityReport[p?.toLowerCase()] ?? 999;
+                    return getPriority(a.priority) - getPriority(b.priority);
+                  }).map((proyec, index) => (
+                    <tr key={index}>
+                      <td className={`priority-cell ${proyec.priority === 'alta' ? 'priority-alta'
+                        : proyec.priority === 'media' ? 'priority-media' : 'priority-baja'
+                        }`} title={proyec.priority}></td>
+                      <td>{proyec.proyect}</td>
+                      <td>{proyec.dateStart}</td>
+                      <td>{proyec.dateEnd}</td>
+                      <td>{proyec.description}</td>
+                      <td><label className='checkbox-button'><input type="checkbox" className='checkbox-button' checked={proyec.completed === 1} onChange={() => updateProyectStatus(proyec.id, Number(proyec.completed) === 1 ? 0 : 1)}></input><span className='custom-checkbox'></span></label></td>
+                      <td><button className='delete' onClick={() => handleDeleteProyect(proyec.id)}><Trash2 /></button></td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </>
+          )}
+
           {active === "registro" && (
             <>
               <button onClick={() => setShowForm(true)}><Plus />Añadir registro</button>
@@ -561,46 +631,6 @@ function AppMain() {
                       <td>{item.task}</td>
                       <td>{item.hours}</td>
                       <td>{item.description}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </>
-          )}
-
-          {active === "proyectos" && (
-            <>
-              <button onClick={() => setActive("registro")}><ArrowLeft /> Volver</button>
-              <button onClick={() => setShowForm(true)}><Plus />Añadir Proyecto</button>
-              {showForm && (
-                <div className='modal-overlay'>
-                  <div className='modal'>
-                    <h2>Nuevo Proyecto</h2>
-                    <form onSubmit={handleSubmitProyect}>
-                      <input name='proyect' placeholder='Proyecto' value={formProyect.proyect} onChange={handleChangeProyect} required />
-                      <input name='description' placeholder='Descripcion' value={formProyect.description} onChange={handleChangeProyect} required />
-                      <button type='submit'>Guardar</button>
-                      <button type='button' onClick={() => setShowForm(false)}>Cancelar</button>
-                    </form>
-                  </div>
-                </div>
-              )}
-              <table className='table'>
-                <thead>
-                  <tr>
-                    <td>Proyecto</td>
-                    <td>Descripcion</td>
-                    <td>Completar</td>
-                    <td></td>
-                  </tr>
-                </thead>
-                <tbody>
-                  {proyects.map((proyec, index) => (
-                    <tr key={index}>
-                      <td>{proyec.proyect}</td>
-                      <td>{proyec.description}</td>
-                      <td><label className='checkbox-button'><input type="checkbox" className='checkbox-button' checked={proyec.completed === 1} onChange={() => updateProyectStatus(proyec.id, Number(proyec.completed) === 1 ? 0 : 1)}></input><span className='custom-checkbox'></span></label></td>
-                      <td><button className='delete' onClick={() => handleDeleteProyect(proyec.id)}><Trash2 /></button></td>
                     </tr>
                   ))}
                 </tbody>
@@ -690,8 +720,7 @@ function AppMain() {
                   }).map((reports, index) => (
                     <tr key={index}>
                       <td className={`priority-cell ${reports.priority === 'alta' ? 'priority-alta'
-                        : reports.priority === 'media' ? 'priority-media'
-                          : 'priority-baja'
+                        : reports.priority === 'media' ? 'priority-media' : 'priority-baja'
                         }`} title={reports.priority}></td>
                       <td>{reports.company}</td>
                       <td>{reports.location}</td>

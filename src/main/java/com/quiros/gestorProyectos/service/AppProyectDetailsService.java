@@ -15,9 +15,12 @@ public class AppProyectDetailsService {
         this.appProyectRepository = appProyectRepository;
     }
 
-    public AppProyect createProyect(String proyect, String description, int complete) {
+    public AppProyect createProyect(String priority, String proyect, String dateStart, String dateEnd, String description, int complete) {
         AppProyect appProyect = new AppProyect();
+        appProyect.setPriority(priority);
         appProyect.setProyect(proyect);
+        appProyect.setDateStart(dateStart);
+        appProyect.setDateEnd(dateEnd);
         appProyect.setDescription(description);
         appProyect.setComplete(complete);
 

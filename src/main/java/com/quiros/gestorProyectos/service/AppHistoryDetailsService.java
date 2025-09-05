@@ -15,7 +15,7 @@ public class AppHistoryDetailsService {
         this.appHistoryRepository = appHistoryRepository;
     }
 
-    public AppHistory createHistory(String username, String proyect, String task, int hours, String description) {
+    public AppHistory createHistory(String username, String proyect, String task, double hours, String description) {
         AppHistory history = new AppHistory();
         history.setUser(username);
         history.setProyect(proyect);

@@ -4,7 +4,7 @@ public class CreateHistoryRequest {
     private String username;
     private String proyect;
     private String task;
-    private int hours;
+    private double hours;
     private String description;
     
     public CreateHistoryRequest() {
@@ -34,11 +34,11 @@ public class CreateHistoryRequest {
         this.task = task;
     }
 
-    public int getHours() {
+    public double getHours() {
         return hours;
     }
 
-    public void setHours(int hours) {
+    public void setHours(double hours) {
         this.hours = hours;
     }
 
