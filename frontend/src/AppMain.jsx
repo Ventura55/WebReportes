@@ -104,6 +104,8 @@ function AppMain() {
     complete: ''
   });
 
+  const [payload, setPayload] = useState({});
+
   const [formTask, setFormTask] = useState({
     task: ''
   })
@@ -192,9 +194,11 @@ function AppMain() {
 
     if (name === "dateEnd"){
       const [year, month, day] = value.split("-");
-      setFormProyect({...formProyect, [name]: `${month}-${day}`});
+      setFormProyect({ ...formProyect, [name]: value });
+      setPayload({ ...payload, dateEnd: `${month}-${day}` });
     } else {
       setFormProyect({ ...formProyect, [name]: value });
+      setPayload({ ...payload, [name]: value });
     }
   };
 
