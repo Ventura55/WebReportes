@@ -189,7 +189,13 @@ function AppMain() {
   // Crear y borrar Proyecto
   const handleChangeProyect = (e) => {
     const { name, value } = e.target;
-    setFormProyect({ ...formProyect, [name]: value });
+
+    if (name === "dateEnd"){
+      const [year, month, day] = value.split("-");
+      setFormProyect({...formProyect, [name]: `${month}-${day}`});
+    } else {
+      setFormProyect({ ...formProyect, [name]: value });
+    }
   };
 
   const handleSubmitProyect = (e) => {
