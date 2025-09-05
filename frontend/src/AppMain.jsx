@@ -524,7 +524,7 @@ function AppMain() {
                     <form onSubmit={handleSubmitProyect}>
                       <input name='proyect' placeholder='Proyecto' value={formProyect.proyect} onChange={handleChangeProyect} required />
                       <input type='hidden' name='dateStart' value={formProyect.dateStart} onChange={handleChangeProyect} />
-                      <input type='date' name='dateEnd' placeholder='Fecha de entrega' value={formProyect.dateEnd} onChange={handleChangeProyect} pattern="\d{2}-\d{2}" required />
+                      <input type='date' name='dateEnd' placeholder='Fecha de entrega' value={formProyect.dateEnd} onChange={handleChangeProyect} required />
                       <div className='priority-row'>
                         <span className='priority-label'>Prioridad:</span>
                         <div className='priority-selector'>
