@@ -128,7 +128,7 @@ main {
     margin: 10px 50px 10px;
     width: 15%;
     display: flex;
-    float: left;
+    float: left !important;
     gap: 5px;
     padding: 10px 12px;
     font-size: 14px;
@@ -335,12 +335,15 @@ select {
 }
 
 .modal-cancel {
-  width: auto !important;        /* solo ocupa lo que mide el texto */
-  display: inline-block !important;
-  margin: 10px 0 0 0;            /* un poco de margen arriba, sin empujarlo */
-  align-self: flex-start;        /* se pega al borde izquierdo */
-  padding: 6px 16px;
-  font-size: 14px;
+    width: auto !important;
+    /* solo ocupa lo que mide el texto */
+    display: inline-block !important;
+    margin: 10px 0 0 0;
+    /* un poco de margen arriba, sin empujarlo */
+    align-self: flex-start;
+    /* se pega al borde izquierdo */
+    padding: 6px 16px;
+    font-size: 14px;
 }
 
 /* Semaforo reportes */
@@ -484,4 +487,39 @@ select {
     color: white;
     font-weight: bold;
     border: none;
+}
+
+.button-filter {
+    border: none !important;
+    background: none !important;
+    float: left !important;
+    font-size: 12px !important;
+    margin-left: -30px;
+}
+
+.filter-wrapper {
+  position: relative; /* el dropdown se pega a este contenedor */
+  display: inline-block;
+  float: left;
+}
+
+.dropdown-filter {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    margin-top: 5px;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    min-width: 180px;
+    z-index: 100;
+}
+
+.dropdown-filter td {
+  align-items: center;
+  gap: 8px;
+  padding: 4px 0;
+  font-size: 13px;
 }

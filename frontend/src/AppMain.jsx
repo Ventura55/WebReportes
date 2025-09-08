@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './AppMain.css'
-import { User, Calendar, ClipboardPenLine, Plus, ArrowLeft, Trash2, LogIn, Check, ClipboardList, ClipboardPen, Clipboard, X, BookOpenText, Logs, FileCheck, FilePlus } from 'lucide-react';
+import { User, Calendar, ClipboardPenLine, Plus, ArrowLeft, Trash2, Check, ClipboardList, ClipboardPen, Clipboard, X, BookOpenText, Logs, FileCheck, FilePlus, ListFilterPlus } from 'lucide-react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios'
 import { PDFDocument } from 'pdf-lib';
@@ -11,6 +11,7 @@ function AppMain() {
   const username = location.state?.username || "Admin";
   const password = location.state?.password || "";
   const dropdownRef = useRef(null);
+  const [showFilter, setShowFilter] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
   const [historial, setHistorial] = useState([]);
   const [active, setActive] = useState("proyectos");
@@ -192,7 +193,7 @@ function AppMain() {
   const handleChangeProyect = (e) => {
     const { name, value } = e.target;
 
-    if (name === "dateEnd"){
+    if (name === "dateEnd") {
       const [year, month, day] = value.split("-");
       setFormProyect({ ...formProyect, [name]: value });
       setPayload({ ...payload, dateEnd: `${month}-${day}` });
@@ -486,6 +487,17 @@ function AppMain() {
     setShowMenu(!showMenu);
   };
 
+  // Filtrar proyectos
+  const toggleFilter = () => {
+    setShowFilter(!showFilter);
+  }
+
+  const [filters, setFilters] = useState({
+    startDate: false,
+    endDate: false,
+    completed: false
+  })
+
   const logout = () => {
     navigate("/");
   };
@@ -521,6 +533,29 @@ function AppMain() {
               <button onClick={() => setActive("registro")}><Logs />Ver Logs</button>
               <button onClick={() => setShowForm(true)}><Plus />Añadir Proyecto</button>
               <input className='main-input' name='proyect' placeholder='Buscar proyecto' value={proyectFilter} onChange={(e) => setProyectFilter(e.target.value)}></input>
+              <div className='filter-wrapper'>
+                <button onClick={toggleFilter} className='button-filter'><ListFilterPlus />Filtrar</button>
+                {showFilter && (
+                  <div className='dropdown-filter'>
+                    <table>
+                      <tbody>
+                        <tr>
+                          <td><input type='checkbox' checked={filters.startDate} onChange={() => setFilters({ ...filters, startDate: !filters.startDate})} /></td>
+                          <td>Fecha Inicio</td>
+                        </tr>
+                        <tr>
+                          <td><input type='checkbox' checked={filters.endDate} onChange={() => setFilters({ ...filters, endDate: !filters.endDate})} /></td>
+                          <td>Fecha Final</td>
+                        </tr>
+                        <tr>
+                          <td><input type='checkbox' checked={filters.completed} onChange={() => setFilters({ ...filters, completed: !filters.completed})} /></td>
+                          <td>Completado</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+              </div>
               {showForm && (
                 <div className='modal-overlay'>
                   <div className='modal'>
@@ -558,7 +593,20 @@ function AppMain() {
                   </tr>
                 </thead>
                 <tbody>
-                  {[...filteredProyect].sort((a,b) => {
+                  {[...filteredProyect].filter(proyec => {
+                    if (filters.startDate && new Date(proyec.dateStart) < new Date()) {
+                      return false;
+                    }
+
+                    if (filters.endDate && new Date(proyec.endDate) < new Date()) {
+                      return false;
+                    }
+
+                    if (filters.completed && proyec.completed !== 1) {
+                      return false;
+                    }
+                    return true;
+                  }).sort((a, b) => {
                     const getPriority = (p) => priorityReport[p?.toLowerCase()] ?? 999;
                     return getPriority(a.priority) - getPriority(b.priority);
                   }).map((proyec, index) => (
