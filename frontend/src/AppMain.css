@@ -257,6 +257,20 @@ main {
     display: inline-block;
 }
 
+.table .action-btn {
+  background: none;
+  border: none;
+  color: #007bff;
+  cursor: pointer;
+  padding: 0;
+  margin-right: 10px;
+  font-size: 0.9rem;
+}
+
+.table .action-btn:hover {
+  text-decoration: underline;
+}
+
 
 .tick {
     background-color: #e6f4ea;

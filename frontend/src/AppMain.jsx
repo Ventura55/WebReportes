@@ -664,13 +664,13 @@ function AppMain() {
                       <td>
                         {editingId === proyec.id ? (
                           <>
-                            <button onClick={() => handleSaveEdit(proyec.id)}>Guardar</button>
-                            <button onClick={() => setEditingId(null)}>Cancelar</button>
+                            <button className="action-btn" onClick={() => handleSaveEdit(proyec.id)}>Guardar</button>
+                            <button className="action-btn" onClick={() => setEditingId(null)}>Cancelar</button>
                           </>
                         ) : (
                           <>
-                            <button onClick={() => handleEditClick(proyec)}>Editar</button>
-                            <button onClick={() => handleDeleteProyect(proyec.id)}>Borrar</button>
+                            <button className="action-btn" onClick={() => handleEditClick(proyec)}>Editar</button>
+                            <button className="action-btn" onClick={() => handleDeleteProyect(proyec.id)}>Borrar</button>
                           </>
                         )}
                       </td>
