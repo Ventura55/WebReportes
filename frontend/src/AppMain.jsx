@@ -442,7 +442,7 @@ function AppMain() {
     }).then(res => {
       alert(res.data.messaage || "Proyecto actualizado");
       setProyects((prev) =>
-      prev.map((p) => (p.id === id ? { ...p, ...editForm } : p)));
+        prev.map((p) => (p.id === id ? { ...p, ...editForm } : p)));
       setEditingId(null);
     }).catch(err => {
       console.error("Error al actualizar proyecto:", err);
@@ -572,11 +572,11 @@ function AppMain() {
                     <table>
                       <tbody>
                         <tr>
-                          <td><input type='checkbox' checked={filters.incomplete} onChange={() => setFilters({ ...filters, incomplete: !filters.incomplete})} /></td>
+                          <td><input type='checkbox' checked={filters.incomplete} onChange={() => setFilters({ ...filters, incomplete: !filters.incomplete })} /></td>
                           <td>Incompleto</td>
                         </tr>
                         <tr>
-                          <td><input type='checkbox' checked={filters.completed} onChange={() => setFilters({ ...filters, completed: !filters.completed})} /></td>
+                          <td><input type='checkbox' checked={filters.completed} onChange={() => setFilters({ ...filters, completed: !filters.completed })} /></td>
                           <td>Completado</td>
                         </tr>
                       </tbody>
@@ -659,20 +659,22 @@ function AppMain() {
                         ) : (proyec.description)}
                       </td>
                       <td>
-                        <label className='checkbox-button'><input type="checkbox" className='checkbox-button' checked={proyec.completed === 1} onChange={() => updateProyectStatus(proyec.id, Number(proyec.completed) === 1 ? 0 : 1)}></input><span className='custom-checkbox'></span></label>
-                      </td>
-                      <td>
-                        {editingId === proyec.id ? (
-                          <>
-                            <button className="link-btn" onClick={() => handleSaveEdit(proyec.id)}>Guardar</button>
-                            <button className="link-btn" onClick={() => setEditingId(null)}>Cancelar</button>
-                          </>
-                        ) : (
-                          <>
-                            <button className="link-btn" onClick={() => handleEditClick(proyec)}><Edit size={14} />Editar</button>
-                            <button className="link-btn" onClick={() => handleDeleteProyect(proyec.id)}><Trash2 size={14} />Borrar</button>
-                          </>
-                        )}
+                        <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
+                          <label className='checkbox-button'><input type="checkbox" className='checkbox-button' checked={proyec.completed === 1} onChange={() => updateProyectStatus(proyec.id, Number(proyec.completed) === 1 ? 0 : 1)}></input><span className='custom-checkbox'></span></label>
+                          <div className="actions">
+                            {editingId === proyec.id ? (
+                              <>
+                                <button className="link-btn" onClick={() => handleSaveEdit(proyec.id)}>Guardar</button>
+                                <button className="link-btn" onClick={() => setEditingId(null)}>Cancelar</button>
+                              </>
+                            ) : (
+                              <>
+                                <button className="link-btn" onClick={() => handleEditClick(proyec)}><Edit size={14} />Editar</button>
+                                <button className="link-btn" onClick={() => handleDeleteProyect(proyec.id)}><Trash2 size={14} />Borrar</button>
+                              </>
+                            )}
+                          </div>
+                        </div>
                       </td>
                     </tr>
                   ))}

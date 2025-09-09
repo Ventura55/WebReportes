@@ -257,21 +257,26 @@ main {
     display: inline-block;
 }
 
-.table .link-btn {
+.link-btn {
   background: none;
   border: none;
   color: #6c757d; /* gris neutro */
   cursor: pointer;
   font-size: 0.85rem;
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  margin-right: 12px;
+  text-align: left;
+  padding: 0;
 }
 
-.table .link-btn:hover {
+.link-btn:hover {
   color: #007bff; /* azul al pasar el ratón */
   text-decoration: underline;
+}
+
+.actions {
+  margin-top: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px; /* espacio entre botones */
 }
 
 .tick {
