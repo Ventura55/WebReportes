@@ -419,6 +419,37 @@ function AppMain() {
     });
   };
 
+  //Editar la tabla de proyectos
+  const [editingId, setEditingId] = useState(null);
+  const [editForm, setEditForm] = useState({});
+
+  const handleEditClick = (proyec) => {
+    setEditingId(proyec.id);
+    setEditForm({ ...proyec });
+  };
+
+  const handleEditChange = (e) => {
+    const { name, value } = e.target;
+    setEditForm({ ...editForm, [name]: value });
+  };
+
+  const handleSaveEdit = (id) => {
+    axios.put(`http://tareas.quirosingenieria.es:8081/api/history/edit/proyect/${id}`, editForm, {
+      auth: {
+        username,
+        password
+      }
+    }).then(res => {
+      alert(res.data.messaage || "Proyecto actualizado");
+      setProyects((prev) =>
+      prev.map((p) => (p.id === id ? { ...p, ...editForm } : p)));
+      setEditingId(null);
+    }).catch(err => {
+      console.error("Error al actualizar proyecto:", err);
+      console.log("editForm", editForm);
+    });
+  };
+
 
   // Cargar los datos al cargar la página
   useEffect(() => {
@@ -495,7 +526,8 @@ function AppMain() {
   const [filters, setFilters] = useState({
     startDate: false,
     endDate: false,
-    completed: false
+    completed: false,
+    incomplete: false
   })
 
   const logout = () => {
@@ -540,12 +572,8 @@ function AppMain() {
                     <table>
                       <tbody>
                         <tr>
-                          <td><input type='checkbox' checked={filters.startDate} onChange={() => setFilters({ ...filters, startDate: !filters.startDate})} /></td>
-                          <td>Fecha Inicio</td>
-                        </tr>
-                        <tr>
-                          <td><input type='checkbox' checked={filters.endDate} onChange={() => setFilters({ ...filters, endDate: !filters.endDate})} /></td>
-                          <td>Fecha Final</td>
+                          <td><input type='checkbox' checked={filters.incomplete} onChange={() => setFilters({ ...filters, incomplete: !filters.incomplete})} /></td>
+                          <td>Incompleto</td>
                         </tr>
                         <tr>
                           <td><input type='checkbox' checked={filters.completed} onChange={() => setFilters({ ...filters, completed: !filters.completed})} /></td>
@@ -594,12 +622,8 @@ function AppMain() {
                 </thead>
                 <tbody>
                   {[...filteredProyect].filter(proyec => {
-                    if (filters.startDate && new Date(proyec.dateStart) < new Date()) {
-                      return false;
-                    }
-
-                    if (filters.endDate && new Date(proyec.endDate) < new Date()) {
-                      return false;
+                    if (filters.incomplete && proyec.completed === 1) {
+                      return false
                     }
 
                     if (filters.completed && proyec.completed !== 1) {
@@ -614,12 +638,42 @@ function AppMain() {
                       <td className={`priority-cell ${proyec.priority === 'alta' ? 'priority-alta'
                         : proyec.priority === 'media' ? 'priority-media' : 'priority-baja'
                         }`} title={proyec.priority}></td>
-                      <td>{proyec.proyect}</td>
-                      <td>{proyec.dateStart}</td>
-                      <td>{proyec.dateEnd}</td>
-                      <td>{proyec.description}</td>
-                      <td><label className='checkbox-button'><input type="checkbox" className='checkbox-button' checked={proyec.completed === 1} onChange={() => updateProyectStatus(proyec.id, Number(proyec.completed) === 1 ? 0 : 1)}></input><span className='custom-checkbox'></span></label></td>
-                      <td><button className='delete' onClick={() => handleDeleteProyect(proyec.id)}><Trash2 /></button></td>
+                      <td>
+                        {editingId === proyec.id ? (
+                          <input name='proyect' value={editForm.proyect} onChange={handleEditChange} />
+                        ) : (proyec.proyect)}
+                      </td>
+                      <td>
+                        {editingId === proyec.id ? (
+                          <input type='date' name='dateStart' value={editForm.dateStart} onChange={handleEditChange} />
+                        ) : (proyec.dateStart)}
+                      </td>
+                      <td>
+                        {editingId === proyec.id ? (
+                          <input type='date' name='dateEnd' value={editForm.dateEnd} onChange={handleEditChange} />
+                        ) : (proyec.dateEnd)}
+                      </td>
+                      <td>
+                        {editingId === proyec.id ? (
+                          <input name='description' value={editForm.description} onChange={handleEditChange} />
+                        ) : (proyec.description)}
+                      </td>
+                      <td>
+                        <label className='checkbox-button'><input type="checkbox" className='checkbox-button' checked={proyec.completed === 1} onChange={() => updateProyectStatus(proyec.id, Number(proyec.completed) === 1 ? 0 : 1)}></input><span className='custom-checkbox'></span></label>
+                      </td>
+                      <td>
+                        {editingId === proyec.id ? (
+                          <>
+                            <button onClick={() => handleSaveEdit(proyec.id)}>Guardar</button>
+                            <button onClick={() => setEditingId(null)}>Cancelar</button>
+                          </>
+                        ) : (
+                          <>
+                            <button onClick={() => handleEditClick(proyec)}>Editar</button>
+                            <button onClick={() => handleDeleteProyect(proyec.id)}>Borrar</button>
+                          </>
+                        )}
+                      </td>
                     </tr>
                   ))}
                 </tbody>
@@ -913,6 +967,7 @@ function AppMain() {
                     </div>
                     <div className='info-section'>
                       <button type='submit'>Crear</button>
+                      <button>Ver lista</button>
                     </div>
                   </form>
                 </div>

@@ -33,4 +33,15 @@ public class AppProyectDetailsService {
         }
         appProyectRepository.deleteById(id);
     }
+
+    public AppProyect editProyect(AppProyect editProyect) {
+        AppProyect proyect = appProyectRepository.findById(editProyect.getId()).orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+        proyect.setProyect(editProyect.getProyect());
+        proyect.setDateStart(editProyect.getDateStart());
+        proyect.setDateEnd(editProyect.getDateEnd());
+        proyect.setDescription(editProyect.getDescription());
+
+        return appProyectRepository.save(proyect);
+    }
 }

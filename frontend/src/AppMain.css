@@ -241,12 +241,20 @@ main {
 
 .delete {
     color: red;
-    border-color: red;
+    border: none !important;
+    size: 7px !important;
+    display: inline-block;
 }
 
 .delete:hover {
     color: red;
     border-color: red;
+}
+
+.edit {
+    border: none !important;
+    size: 7px !important;
+    display: inline-block;
 }
 
 

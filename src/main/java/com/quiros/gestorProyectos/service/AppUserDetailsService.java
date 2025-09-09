@@ -3,16 +3,16 @@ package com.quiros.gestorProyectos.service;
 import java.util.Collections;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.quiros.gestorProyectos.repository.AppUserRepository;
 import com.quiros.gestorProyectos.entity.AppUser;
+import com.quiros.gestorProyectos.repository.AppUserRepository;
 
 @Service
 public class AppUserDetailsService implements UserDetailsService {
@@ -51,8 +51,7 @@ public class AppUserDetailsService implements UserDetailsService {
     }
 
     public AppUser updateUser(AppUser updatedUser) {
-        AppUser user = appUserRepository.findById(updatedUser.getId())
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+        AppUser user = appUserRepository.findById(updatedUser.getId()).orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
         user.setUsername(updatedUser.getUsername());
         user.setGmail(updatedUser.getGmail());

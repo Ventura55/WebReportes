@@ -133,6 +133,16 @@ public class AppHistoryController {
         }
     }
 
+    @PutMapping("/edit/proyect/{id}")
+    public ResponseEntity<?> editProyect(@RequestBody AppProyect editProyect) {
+        try {
+            AppProyect proyect = appProyectDetailsService.editProyect(editProyect);
+            return ResponseEntity.ok(proyect);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
+
     @PostMapping("/create/task")
     public ResponseEntity<?> createTask(@RequestBody CreateTaskRequest request) {
         AppTask appTask = appTaskDetailsService.createTask(request.getTask());
