@@ -659,9 +659,9 @@ function AppMain() {
                         ) : (proyec.description)}
                       </td>
                       <td>
-                        <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
+                        <div className="cell-actions">
                           <label className='checkbox-button'><input type="checkbox" className='checkbox-button' checked={proyec.completed === 1} onChange={() => updateProyectStatus(proyec.id, Number(proyec.completed) === 1 ? 0 : 1)}></input><span className='custom-checkbox'></span></label>
-                          <div className="actions">
+                          <div className="actions-row">
                             {editingId === proyec.id ? (
                               <>
                                 <button className="link-btn" onClick={() => handleSaveEdit(proyec.id)}>Guardar</button>

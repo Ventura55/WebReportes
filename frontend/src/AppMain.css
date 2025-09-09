@@ -251,32 +251,31 @@ main {
     border-color: red;
 }
 
-.edit {
-    border: none !important;
-    size: 7px !important;
-    display: inline-block;
+.table .cell-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* centra todo horizontalmente */
+  justify-content: center; /* centra verticalmente */
+  gap: 6px; /* espacio entre checkbox y botones */
 }
 
-.link-btn {
+.table .actions-row {
+  display: flex;
+  gap: 10px; /* separación entre los botones */
+}
+
+.table .link-btn {
   background: none;
   border: none;
   color: #6c757d; /* gris neutro */
   cursor: pointer;
   font-size: 0.85rem;
-  text-align: left;
-  padding: 0;
+  padding: 2px 4px;
 }
 
-.link-btn:hover {
+.table .link-btn:hover {
   color: #007bff; /* azul al pasar el ratón */
   text-decoration: underline;
-}
-
-.actions {
-  margin-top: 4px;
-  display: flex;
-  flex-direction: column;
-  gap: 4px; /* espacio entre botones */
 }
 
 .tick {
