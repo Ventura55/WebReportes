@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './AppMain.css'
-import { User, Calendar, ClipboardPenLine, Plus, ArrowLeft, Trash2, Check, ClipboardList, ClipboardPen, Clipboard, X, BookOpenText, Logs, FileCheck, FilePlus, ListFilterPlus } from 'lucide-react';
+import { User, Calendar, ClipboardPenLine, Plus, ArrowLeft, Trash2, Check, ClipboardList, ClipboardPen, Clipboard, X, BookOpenText, Logs, FileCheck, FilePlus, ListFilterPlus, Edit } from 'lucide-react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios'
 import { PDFDocument } from 'pdf-lib';
@@ -664,13 +664,13 @@ function AppMain() {
                       <td>
                         {editingId === proyec.id ? (
                           <>
-                            <button className="action-btn" onClick={() => handleSaveEdit(proyec.id)}>Guardar</button>
-                            <button className="action-btn" onClick={() => setEditingId(null)}>Cancelar</button>
+                            <button className="link-btn" onClick={() => handleSaveEdit(proyec.id)}>Guardar</button>
+                            <button className="link-btn" onClick={() => setEditingId(null)}>Cancelar</button>
                           </>
                         ) : (
                           <>
-                            <button className="action-btn" onClick={() => handleEditClick(proyec)}>Editar</button>
-                            <button className="action-btn" onClick={() => handleDeleteProyect(proyec.id)}>Borrar</button>
+                            <button className="link-btn" onClick={() => handleEditClick(proyec)}><Edit size={14} />Editar</button>
+                            <button className="link-btn" onClick={() => handleDeleteProyect(proyec.id)}><Trash2 size={14} />Borrar</button>
                           </>
                         )}
                       </td>

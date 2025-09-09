@@ -257,20 +257,22 @@ main {
     display: inline-block;
 }
 
-.table .action-btn {
+.table .link-btn {
   background: none;
   border: none;
-  color: #007bff;
+  color: #6c757d; /* gris neutro */
   cursor: pointer;
-  padding: 0;
-  margin-right: 10px;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-right: 12px;
 }
 
-.table .action-btn:hover {
+.table .link-btn:hover {
+  color: #007bff; /* azul al pasar el ratón */
   text-decoration: underline;
 }
-
 
 .tick {
     background-color: #e6f4ea;
