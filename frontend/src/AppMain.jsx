@@ -646,9 +646,34 @@ function AppMain() {
                     return getPriority(a.priority) - getPriority(b.priority);
                   }).map((proyec, index) => (
                     <tr key={index}>
-                      <td className={`priority-cell ${proyec.priority === 'alta' ? 'priority-alta'
-                        : proyec.priority === 'media' ? 'priority-media' : 'priority-baja'
-                        }`} title={proyec.priority}></td>
+                      <td>
+                        {editingId === proyec.id ? (
+                          <div className="priority-square-container">
+                            <div
+                              className={`priority-square red ${editForm.priority === 'alta' ? 'selected' : ''}`}
+                              onClick={() => setEditForm({ ...editForm, priority: 'alta' })}
+                            />
+                            <div
+                              className={`priority-square yellow ${editForm.priority === 'media' ? 'selected' : ''}`}
+                              onClick={() => setEditForm({ ...editForm, priority: 'media' })}
+                            />
+                            <div
+                              className={`priority-square green ${editForm.priority === 'baja' ? 'selected' : ''}`}
+                              onClick={() => setEditForm({ ...editForm, priority: 'baja' })}
+                            />
+                          </div>
+                        ) : (
+                          <div
+                            className={`priority-cell ${proyec.priority === 'alta'
+                                ? 'priority-alta'
+                                : proyec.priority === 'media'
+                                  ? 'priority-media'
+                                  : 'priority-baja'
+                              }`}
+                            title={proyec.priority}
+                          />
+                        )}
+                      </td>
                       <td>
                         {editingId === proyec.id ? (
                           <input name='proyect' value={editForm.proyect} onChange={handleEditChange} />
@@ -846,33 +871,9 @@ function AppMain() {
                     return getPriority(a.priority) - getPriority(b.priority);
                   }).map((reports, index) => (
                     <tr key={index}>
-                      {isEditing && editProject?.id === project.id ? (
-                        <td className="priority-cell">
-                          <div className="priority-square-container">
-                            <div
-                              className={`priority-square red ${editProject.priority === 'alta' ? 'selected' : ''}`}
-                              onClick={() => setEditProject({ ...editProject, priority: 'alta' })}
-                            />
-                            <div
-                              className={`priority-square yellow ${editProject.priority === 'media' ? 'selected' : ''}`}
-                              onClick={() => setEditProject({ ...editProject, priority: 'media' })}
-                            />
-                            <div
-                              className={`priority-square green ${editProject.priority === 'baja' ? 'selected' : ''}`}
-                              onClick={() => setEditProject({ ...editProject, priority: 'baja' })}
-                            />
-                          </div>
-                        </td>
-                      ) : (
-                        <td
-                          className={`priority-cell ${project.priority === 'alta'
-                              ? 'priority-alta'
-                              : project.priority === 'media'
-                                ? 'priority-media'
-                                : 'priority-baja'
-                            }`}
-                        />
-                      )}
+                      <td className={`priority-cell ${reports.priority === 'alta' ? 'priority-alta'
+                        : reports.priority === 'media' ? 'priority-media' : 'priority-baja'
+                        }`} title={reports.priority}></td>
                       <td>{reports.company}</td>
                       <td>{reports.location}</td>
                       <td>{reports.date}</td>
