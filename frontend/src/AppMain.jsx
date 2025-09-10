@@ -19,6 +19,7 @@ function AppMain() {
   const [proyectFilter, setProyectFilter] = useState('');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+  const [showUser, setShowUser] = useState(false);
 
   // Select de los nuevos registros
   const [user, setUser] = useState([]);
@@ -969,9 +970,35 @@ function AppMain() {
                     </div>
                     <div className='info-section'>
                       <button type='submit'>Crear</button>
-                      <button>Ver lista</button>
+                      <button type='button' onChange={() => setShowUser(true)}>Ver lista</button>
                     </div>
                   </form>
+                </div>
+              )}
+
+              {showUser && (
+                <div className='modal-overlay'>
+                  <div className='modal'>
+                    <h2>Usuarios</h2>
+                    <table>
+                      <thead>
+                        <tr>
+                          <th>Nombre</th>
+                          <th>Correo</th>
+                          <th>Rol</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {user.map((u, i) => (
+                          <tr key={i}>
+                            <td>{u.username}</td>
+                            <td>{u.gmail}</td>
+                            <td>{u.rol}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
               )}
             </>
