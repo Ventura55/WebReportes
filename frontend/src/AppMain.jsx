@@ -990,11 +990,10 @@ function AppMain() {
                 <div className='modal-overlay'>
                   <div className='modal'>
                     <h2>Usuarios</h2>
-                    <table>
+                    <table className='table'>
                       <thead>
                         <tr>
                           <th>Nombre</th>
-                          <th>Correo</th>
                           <th>Rol</th>
                         </tr>
                       </thead>
