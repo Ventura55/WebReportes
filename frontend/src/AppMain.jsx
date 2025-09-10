@@ -100,7 +100,7 @@ function AppMain() {
   const [formProyect, setFormProyect] = useState({
     priority: '',
     proyect: '',
-    dateStart: new Date().toISOString().split("T")[0],
+    dateStart: new Date().toISOString().split("T")[0], 
     dateEnd: '',
     description: '',
     complete: ''
@@ -303,7 +303,7 @@ function AppMain() {
 
   const handleDeleteUser = (id) => {
     axios.delete(`http://tareas.quirosingenieria.es:8081/api/user/delete/${id}`, {
-      auth: { username, password }
+      auth: {username, password}
     }).then(() => {
       setUser(prev => prev.filter(u => u.id !== id));
     }).catch(err => {
@@ -646,33 +646,9 @@ function AppMain() {
                     return getPriority(a.priority) - getPriority(b.priority);
                   }).map((proyec, index) => (
                     <tr key={index}>
-                      <td>
-                        {editingId === proyec.id ? (
-                          <div className="priority-edit-cell">
-                            <div
-                              className={`priority-option red ${editForm.priority === 'alta' ? 'selected' : ''}`}
-                              onClick={() => setEditForm({ ...editForm, priority: 'alta' })}
-                            />
-                            <div
-                              className={`priority-option yellow ${editForm.priority === 'media' ? 'selected' : ''}`}
-                              onClick={() => setEditForm({ ...editForm, priority: 'media' })}
-                            />
-                            <div
-                              className={`priority-option green ${editForm.priority === 'baja' ? 'selected' : ''}`}
-                              onClick={() => setEditForm({ ...editForm, priority: 'baja' })}
-                            />
-                          </div>
-                        ) : (
-                          <div
-                            className={`priority-cell ${proyec.priority === 'alta'
-                                ? 'priority-alta'
-                                : proyec.priority === 'media'
-                                  ? 'priority-media'
-                                  : 'priority-baja'
-                              }`}
-                            title={proyec.priority}
-                          />
-                        )}
+                      <td className={`priority-cell ${proyec.priority === 'alta' ? 'priority-alta'
+                        : proyec.priority === 'media' ? 'priority-media' : 'priority-baja'
+                        }`} title={proyec.priority}>
                       </td>
                       <td>
                         {editingId === proyec.id ? (
@@ -698,19 +674,19 @@ function AppMain() {
                         <div className="cell-actions">
                           <label className='checkbox-button'><input type="checkbox" className='checkbox-button' checked={proyec.completed === 1} onChange={() => updateProyectStatus(proyec.id, Number(proyec.completed) === 1 ? 0 : 1)}></input><span className='custom-checkbox'></span></label>
                           {infoUser.rol === "Admin" && (
-                            <div className="actions-row">
-                              {editingId === proyec.id ? (
-                                <>
-                                  <button className="link-btn" onClick={() => handleSaveEdit(proyec.id)}>Guardar</button>
-                                  <button className="link-btn" onClick={() => setEditingId(null)}>Cancelar</button>
-                                </>
-                              ) : (
-                                <>
-                                  <button className="link-btn" onClick={() => handleEditClick(proyec)}><Edit size={14} />Editar</button>
-                                  <button className="link-btn" onClick={() => handleDeleteProyect(proyec.id)}><Trash2 size={14} />Borrar</button>
-                                </>
-                              )}
-                            </div>
+                          <div className="actions-row">
+                            {editingId === proyec.id ? (
+                              <>
+                                <button className="link-btn" onClick={() => handleSaveEdit(proyec.id)}>Guardar</button>
+                                <button className="link-btn" onClick={() => setEditingId(null)}>Cancelar</button>
+                              </>
+                            ) : (
+                              <>
+                                <button className="link-btn" onClick={() => handleEditClick(proyec)}><Edit size={14} />Editar</button>
+                                <button className="link-btn" onClick={() => handleDeleteProyect(proyec.id)}><Trash2 size={14} />Borrar</button>
+                              </>
+                            )}
+                          </div>
                           )}
                         </div>
                       </td>
