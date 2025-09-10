@@ -64,4 +64,11 @@ public class AppUserDetailsService implements UserDetailsService {
 
         return appUserRepository.save(user);
     }
+
+    public void deleteUserById(Long id) {
+        if (!appUserRepository.existsById(id)) {
+            throw new RuntimeException("El usuario no existe con Id:" + id);
+        }
+        appUserRepository.deleteById(id);
+    }
 }

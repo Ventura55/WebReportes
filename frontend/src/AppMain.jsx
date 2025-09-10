@@ -301,6 +301,16 @@ function AppMain() {
     })
   }
 
+  const handleDeleteUser = (id) => {
+    axios.delete(`http://tareas.quirosingenieria.es:8081/api/user/delete/${id}`, {
+      auth: {username, password}
+    }).then(() => {
+      setUser(prev => prev.filter(u => u.id !== id));
+    }).catch(err => {
+      console.error("Error al eliminar usuario", err);
+    });
+  };
+
   const handleDeleteTask = (id) => {
     axios.delete(`http://tareas.quirosingenieria.es:8081/api/history/delete/task/${id}`, {
       auth: {
@@ -989,11 +999,11 @@ function AppMain() {
                         </tr>
                       </thead>
                       <tbody>
-                        {user.map((u, i) => (
+                        {user.map((username, i) => (
                           <tr key={i}>
-                            <td>{u.username}</td>
-                            <td>{u.gmail}</td>
-                            <td>{u.rol}</td>
+                            <td>{username.username}</td>
+                            <td>{username.rol}</td>
+                            <td className='priority-button'><button className='delete' onClick={() => handleDeleteUser(username.id)}><Trash2 /></button></td>
                           </tr>
                         ))}
                       </tbody>
