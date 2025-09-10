@@ -944,7 +944,7 @@ function AppMain() {
                   )}
                 </div>
               </div>
-              {infoUser.rol === "Admin" && (
+              
                 <div className='info-container'>
                   <h2>Crear Cuenta</h2>
 
@@ -970,11 +970,11 @@ function AppMain() {
                     </div>
                     <div className='info-section'>
                       <button type='submit'>Crear</button>
-                      <button type='button' onChange={() => setShowUser(true)}>Ver lista</button>
+                      <button type='button' onClick={() => setShowUser(true)}>Ver lista</button>
                     </div>
                   </form>
                 </div>
-              )}
+              
 
               {showUser && (
                 <div className='modal-overlay'>
@@ -998,6 +998,7 @@ function AppMain() {
                         ))}
                       </tbody>
                     </table>
+                    <button className='modal-cancel' onClick={() => setShowUser(false)}>Cerrar</button>
                   </div>
                 </div>
               )}
