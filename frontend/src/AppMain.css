@@ -268,7 +268,6 @@ main {
   color: #6c757d; /* gris neutro */
   cursor: pointer;
   font-size: 0.85rem;
-  padding: 2px 4px;
 }
 
 .table .link-btn:hover {

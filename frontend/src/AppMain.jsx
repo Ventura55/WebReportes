@@ -666,12 +666,13 @@ function AppMain() {
                       </td>
                       <td>
                         {editingId === proyec.id ? (
-                          <input name='description' value={editForm.description} onChange={handleEditChange} />
+                          <textarea name='description' value={editForm.description} onChange={handleEditChange} />
                         ) : (proyec.description)}
                       </td>
                       <td>
                         <div className="cell-actions">
                           <label className='checkbox-button'><input type="checkbox" className='checkbox-button' checked={proyec.completed === 1} onChange={() => updateProyectStatus(proyec.id, Number(proyec.completed) === 1 ? 0 : 1)}></input><span className='custom-checkbox'></span></label>
+                          {infoUser.rol === "Admin" && (
                           <div className="actions-row">
                             {editingId === proyec.id ? (
                               <>
@@ -685,6 +686,7 @@ function AppMain() {
                               </>
                             )}
                           </div>
+                          )}
                         </div>
                       </td>
                     </tr>
@@ -887,7 +889,7 @@ function AppMain() {
               <table className='table'>
                 <thead>
                   <tr>
-                    <td>Empresa</td>
+                    <td>Cliente</td>
                     <td>Ubicación</td>
                     <td>Fecha</td>
                     <td>Descripcion</td>
@@ -954,7 +956,7 @@ function AppMain() {
                   )}
                 </div>
               </div>
-              
+              {infoUser.rol === "Admin" && (
                 <div className='info-container'>
                   <h2>Crear Cuenta</h2>
 
@@ -984,8 +986,7 @@ function AppMain() {
                     </div>
                   </form>
                 </div>
-              
-
+              )}
               {showUser && (
                 <div className='modal-overlay'>
                   <div className='modal'>
@@ -995,6 +996,7 @@ function AppMain() {
                         <tr>
                           <th>Nombre</th>
                           <th>Rol</th>
+                          <th></th>
                         </tr>
                       </thead>
                       <tbody>
