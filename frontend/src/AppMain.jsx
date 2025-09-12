@@ -542,12 +542,42 @@ function AppMain() {
     incomplete: false
   })
 
-  const changeSubpriority = (id, delta) => {
-    setEditForm(prev => ({
-      ...prev,
-      subpriority: prev.subpriority + delta
-    }));
+  const changeSubpriority = (id, diff) => {
+    setEditForm((prev) => {
+      const updated = [...prev];
+
+      // Proyecto actual
+      const index = updated.findIndex((p) => p.id === id);
+      const current = updated[index];
+
+      // Filtrar solo los de la misma prioridad
+      const samePriority = updated
+        .filter((p) => p.priority === current.priority)
+        .sort((a, b) => a.subpriority - b.subpriority);
+
+      // Posición dentro de su grupo
+      const pos = samePriority.findIndex((p) => p.id === id);
+      const targetPos = pos + diff;
+
+      // Si se sale del rango (primer o último) → no hacer nada
+      if (targetPos < 0 || targetPos >= samePriority.length) {
+        return prev;
+      }
+
+      // Intercambiar subpriority con el vecino
+      const neighbor = samePriority[targetPos];
+      const temp = current.subpriority;
+      current.subpriority = neighbor.subpriority;
+      neighbor.subpriority = temp;
+
+      // Guardar automáticamente
+      handleSaveEdit(id, current);
+      handleSaveEdit(neighbor.id, neighbor);
+
+      return updated;
+    });
   };
+
 
   const logout = () => {
     navigate("/");
@@ -640,7 +670,7 @@ function AppMain() {
                   </tr>
                 </thead>
                 <tbody>
-                  {[...filteredProyect 
+                  {[...filteredProyect
                     //id: "1", proyect: "Proyecto de prueba", subpriority: 1, dateStart: "2025-09-01", dateEnd: "2025-09-15", description: "Esto es solo un test local", priority: "media", completed: 0
                   ].filter(proyec => {
                     if (filters.incomplete && proyec.completed === 1) {
@@ -676,9 +706,9 @@ function AppMain() {
                           />
                           {/* Subpriority */}
                           <div className="subpriority-cell">
-                            <button onClick={() => changeSubpriority(proyec.id, -1)} disabled={editForm.subpriority <= 1}>↑</button>
-                            
-                            <button onClick={() => changeSubpriority(proyec.id, 1)} disabled={editForm.subpriority >= 99}>↓</button>
+                            <button onClick={() => { changeSubpriority(proyec.id, -1); handleSaveEdit(proyec.id); }} disabled={editForm.subpriority <= 1}>↓</button>
+
+                            <button onClick={() => { changeSubpriority(proyec.id, 1); handleSaveEdit(proyec.id); }} disabled={editForm.subpriority >= 99}>↑</button>
                           </div>
 
                         </td>
@@ -717,7 +747,7 @@ function AppMain() {
                       <td>
                         <div className="cell-actions">
                           <label className='checkbox-button'><input type="checkbox" className='checkbox-button' checked={proyec.completed === 1} onChange={() => updateProyectStatus(proyec.id, Number(proyec.completed) === 1 ? 0 : 1)}></input><span className='custom-checkbox'></span></label>
-                          
+
                           <div className="actions-row">
                             {editingId === proyec.id ? ( // {infoUser.rol === "Admin" && (
                               <>
