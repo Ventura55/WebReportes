@@ -640,10 +640,8 @@ function AppMain() {
                   </tr>
                 </thead>
                 <tbody>
-                  {[...filteredProyect, {
+                  {[...filteredProyect 
                     //id: "1", proyect: "Proyecto de prueba", subpriority: 1, dateStart: "2025-09-01", dateEnd: "2025-09-15", description: "Esto es solo un test local", priority: "media", completed: 0
-                  }
-
                   ].filter(proyec => {
                     if (filters.incomplete && proyec.completed === 1) {
                       return false
@@ -655,7 +653,11 @@ function AppMain() {
                     return true;
                   }).sort((a, b) => {
                     const getPriority = (p) => priorityReport[p?.toLowerCase()] ?? 999;
-                    return getPriority(a.priority) - getPriority(b.priority);
+
+                    const priorityDiff = getPriority(a.priority) - getPriority(b.priority);
+                    if (priorityDiff !== 0) return priorityDiff;
+
+                    return a.subpriority - b.subpriority;
                   }).map((proyec, index) => (
                     <tr key={index}>
                       {editingId === proyec.id ? (
