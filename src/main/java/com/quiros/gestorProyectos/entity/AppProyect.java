@@ -18,6 +18,9 @@ public class AppProyect {
     @Column(name = "prioridad_tarea")
     private String priority;
 
+    @Column(name = "subprioridad_tarea")
+    private int subpriority;
+
     @Column(name = "proyecto_tarea")
     private String proyect;
 
@@ -50,6 +53,14 @@ public class AppProyect {
 
     public void setPriority(String priority) {
         this.priority = priority;
+    }
+
+    public int getSubpriority() {
+        return subpriority;
+    }
+
+    public void setSubpriority(int subpriority) {
+        this.subpriority = subpriority;
     }
 
     public String getProyect() {
@@ -91,5 +102,4 @@ public class AppProyect {
     public void setComplete(int complete) {
         this.complete = complete;
     }
-    
 }

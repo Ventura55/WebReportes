@@ -99,6 +99,7 @@ function AppMain() {
 
   const [formProyect, setFormProyect] = useState({
     priority: '',
+    subpriority: '',
     proyect: '',
     dateStart: new Date().toISOString().split("T")[0],
     dateEnd: '',
@@ -541,6 +542,13 @@ function AppMain() {
     incomplete: false
   })
 
+  const changeSubpriority = (id, delta) => {
+    setEditForm(prev => ({
+      ...prev,
+      subpriority: prev.subpriority + delta
+    }));
+  };
+
   const logout = () => {
     navigate("/");
   };
@@ -632,7 +640,11 @@ function AppMain() {
                   </tr>
                 </thead>
                 <tbody>
-                  {[...filteredProyect].filter(proyec => {
+                  {[...filteredProyect, {
+                    //id: "1", proyect: "Proyecto de prueba", subpriority: 1, dateStart: "2025-09-01", dateEnd: "2025-09-15", description: "Esto es solo un test local", priority: "media", completed: 0
+                  }
+
+                  ].filter(proyec => {
                     if (filters.incomplete && proyec.completed === 1) {
                       return false
                     }
@@ -660,6 +672,13 @@ function AppMain() {
                             className={`priority-option green ${editForm.priority === 'baja' ? 'selected' : ''}`}
                             onClick={() => setEditForm({ ...editForm, priority: 'baja' })}
                           />
+                          {/* Subpriority */}
+                          <div className="subpriority-cell">
+                            <button onClick={() => changeSubpriority(proyec.id, -1)} disabled={editForm.subpriority <= 1}>↑</button>
+                            
+                            <button onClick={() => changeSubpriority(proyec.id, 1)} disabled={editForm.subpriority >= 99}>↓</button>
+                          </div>
+
                         </td>
                       ) : (
                         <td
@@ -672,6 +691,7 @@ function AppMain() {
                           title={proyec.priority}
                         />
                       )}
+
                       <td>
                         {editingId === proyec.id ? (
                           <input name='proyect' value={editForm.proyect} onChange={handleEditChange} />
@@ -695,21 +715,21 @@ function AppMain() {
                       <td>
                         <div className="cell-actions">
                           <label className='checkbox-button'><input type="checkbox" className='checkbox-button' checked={proyec.completed === 1} onChange={() => updateProyectStatus(proyec.id, Number(proyec.completed) === 1 ? 0 : 1)}></input><span className='custom-checkbox'></span></label>
-                          {infoUser.rol === "Admin" && (
-                            <div className="actions-row">
-                              {editingId === proyec.id ? ( // Por aqui va lo de rol === "Admin"
-                                <>
-                                  <button className="link-btn" onClick={() => handleSaveEdit(proyec.id)}>Guardar</button>
-                                  <button className="link-btn" onClick={() => setEditingId(null)}>Cancelar</button>
-                                </>
-                              ) : (
-                                <>
-                                  <button className="link-btn" onClick={() => handleEditClick(proyec)}><Edit size={14} />Editar</button>
-                                  <button className="link-btn" onClick={() => handleDeleteProyect(proyec.id)}><Trash2 size={14} />Borrar</button>
-                                </>
-                              )}
-                            </div>
-                          )}
+                          
+                          <div className="actions-row">
+                            {editingId === proyec.id ? ( // {infoUser.rol === "Admin" && (
+                              <>
+                                <button className="link-btn" onClick={() => handleSaveEdit(proyec.id)}>Guardar</button>
+                                <button className="link-btn" onClick={() => setEditingId(null)}>Cancelar</button>
+                              </>
+                            ) : (
+                              <>
+                                <button className="link-btn" onClick={() => handleEditClick(proyec)}><Edit size={14} />Editar</button>
+                                <button className="link-btn" onClick={() => handleDeleteProyect(proyec.id)}><Trash2 size={14} />Borrar</button>
+                              </>
+                            )}
+                          </div>
+
                         </div>
                       </td>
                     </tr>

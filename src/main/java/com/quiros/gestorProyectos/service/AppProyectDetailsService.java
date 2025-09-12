@@ -24,6 +24,12 @@ public class AppProyectDetailsService {
         appProyect.setDescription(description);
         appProyect.setComplete(complete);
 
+        Integer maxSub = appProyectRepository.findMaxSubpriorityByPriority(priority);
+        if (maxSub == null) {
+            maxSub = 0;
+        }
+        appProyect.setSubpriority(maxSub + 1);
+
         return appProyectRepository.save(appProyect);
     }
 
@@ -37,6 +43,7 @@ public class AppProyectDetailsService {
     public AppProyect editProyect(AppProyect editProyect) {
         AppProyect proyect = appProyectRepository.findById(editProyect.getId()).orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
+        proyect.setSubpriority(editProyect.getSubpriority());
         proyect.setProyect(editProyect.getProyect());
         proyect.setDateStart(editProyect.getDateStart());
         proyect.setDateEnd(editProyect.getDateEnd());
