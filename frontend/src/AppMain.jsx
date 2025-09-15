@@ -542,13 +542,16 @@ function AppMain() {
     incomplete: false
   })
 
+  const [projects, setProjects] = useState([]);
+
   const changeSubpriority = (id, diff) => {
-    setEditForm((prev) => {
+    setProjects((prev) => {
       const updated = [...prev];
 
       // Proyecto actual
       const index = updated.findIndex((p) => p.id === id);
       const current = updated[index];
+      if (!current) return prev;
 
       // Filtrar solo los de la misma prioridad
       const samePriority = updated
@@ -564,17 +567,19 @@ function AppMain() {
         return prev;
       }
 
-      // Intercambiar subpriority con el vecino
+      // Vecino con el que intercambia
       const neighbor = samePriority[targetPos];
+
+      // Intercambiar subpriority
       const temp = current.subpriority;
       current.subpriority = neighbor.subpriority;
       neighbor.subpriority = temp;
 
-      // Guardar automáticamente
-      handleSaveEdit(id, current);
+      // Guardar automáticamente en BD
+      handleSaveEdit(current.id, current);
       handleSaveEdit(neighbor.id, neighbor);
 
-      return updated;
+      return [...updated];
     });
   };
 
@@ -706,9 +711,8 @@ function AppMain() {
                           />
                           {/* Subpriority */}
                           <div className="subpriority-cell">
-                            <button onClick={() => { changeSubpriority(proyec.id, -1); handleSaveEdit(proyec.id); }} disabled={editForm.subpriority <= 1}>↓</button>
-
-                            <button onClick={() => { changeSubpriority(proyec.id, 1); handleSaveEdit(proyec.id); }} disabled={editForm.subpriority >= 99}>↑</button>
+                            <button onClick={() => { changeSubpriority(proyec.id, 1); handleSaveEdit(proyec.id); }} disabled={editForm.subpriority >= 99}>↓</button>
+                            <button onClick={() => { changeSubpriority(proyec.id, -1); handleSaveEdit(proyec.id); }} disabled={editForm.subpriority <= 1}>↑</button>
                           </div>
 
                         </td>
