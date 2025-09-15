@@ -545,6 +545,9 @@ function AppMain() {
   const [projects, setProjects] = useState([]);
 
   const changeSubpriority = (id, diff) => {
+    console.log('[DEBUG] changeSubpriority called -> id:', id, ' diff:', diff);
+    console.log('[DEBUG] projects length:', projects.length);
+
     setProjects((prev) => {
       const updated = [...prev];
 
@@ -683,8 +686,9 @@ function AppMain() {
                   </tr>
                 </thead>
                 <tbody>
-                  {[...filteredProyect
-                    //id: "1", proyect: "Proyecto de prueba", subpriority: 1, dateStart: "2025-09-01", dateEnd: "2025-09-15", description: "Esto es solo un test local", priority: "media", completed: 0
+                  {[...filteredProyect, {
+                    id: "1", proyect: "Proyecto de prueba", subpriority: 1, dateStart: "2025-09-01", dateEnd: "2025-09-15", description: "Esto es solo un test local", priority: "media", completed: 0
+                  }
                   ].filter(proyec => {
                     if (filters.incomplete && proyec.completed === 1) {
                       return false
