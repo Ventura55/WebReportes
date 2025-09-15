@@ -550,7 +550,7 @@ function AppMain() {
 
       // Proyecto actual
       const index = updated.findIndex((p) => p.id === id);
-      const current = updated[index];
+      const current = { ...updated[index] }; // ← clonamos
       if (!current) return prev;
 
       // Filtrar solo los de la misma prioridad
@@ -562,26 +562,34 @@ function AppMain() {
       const pos = samePriority.findIndex((p) => p.id === id);
       const targetPos = pos + diff;
 
-      // Si se sale del rango (primer o último) → no hacer nada
+      // Si se sale del rango → no hacer nada
       if (targetPos < 0 || targetPos >= samePriority.length) {
         return prev;
       }
 
       // Vecino con el que intercambia
-      const neighbor = samePriority[targetPos];
+      const neighborIndex = updated.findIndex(
+        (p) => p.id === samePriority[targetPos].id
+      );
+      const neighbor = { ...updated[neighborIndex] };
 
       // Intercambiar subpriority
       const temp = current.subpriority;
       current.subpriority = neighbor.subpriority;
       neighbor.subpriority = temp;
 
+      // Actualizar en el array
+      updated[index] = current;
+      updated[neighborIndex] = neighbor;
+
       // Guardar automáticamente en BD
       handleSaveEdit(current.id, current);
       handleSaveEdit(neighbor.id, neighbor);
 
-      return [...updated];
+      return updated;
     });
   };
+
 
 
   const logout = () => {
