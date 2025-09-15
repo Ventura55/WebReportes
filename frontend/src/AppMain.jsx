@@ -711,8 +711,8 @@ function AppMain() {
                           />
                           {/* Subpriority */}
                           <div className="subpriority-cell">
-                            <button onClick={() => { changeSubpriority(proyec.id, 1); handleSaveEdit(proyec.id); }} disabled={editForm.subpriority >= 99}>↓</button>
-                            <button onClick={() => { changeSubpriority(proyec.id, -1); handleSaveEdit(proyec.id); }} disabled={editForm.subpriority <= 1}>↑</button>
+                            <button onClick={() => changeSubpriority(proyec.id, 1)} disabled={editForm.subpriority >= 99}>↓</button>
+                            <button onClick={() => changeSubpriority(proyec.id, -1)} disabled={editForm.subpriority <= 1}>↑</button>
                           </div>
 
                         </td>
