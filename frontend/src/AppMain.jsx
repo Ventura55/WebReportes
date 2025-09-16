@@ -47,7 +47,6 @@ function AppMain() {
         }));
         setUser(userRes.data);
         setProyects(normalizedData);
-
         const uniqueTask = Array.from(new Map(taskRes.data.map(t => [t.task, t])).values());
         setTask(uniqueTask);
         setReport(reportRes.data);
@@ -547,6 +546,9 @@ function AppMain() {
   // Filtrar los proyectos por el nombre
   const filteredProyect = useMemo(() => {
     return projects
+      .filter(item =>
+        item.proyect.toLowerCase().includes(proyectFilter.toLowerCase())
+      )
       .filter(proyec => {
         if (filters.incomplete && proyec.completed === 1) return false;
         if (filters.completed && proyec.completed !== 1) return false;
@@ -558,7 +560,7 @@ function AppMain() {
         if (priorityDiff !== 0) return priorityDiff;
         return a.subpriority - b.subpriority;
       });
-  }, [projects, filters]);
+  }, [projects, filters, proyectFilter]);
 
   const changeSubpriority = (id, diff) => {
     setProjects((prev) => {
