@@ -541,7 +541,7 @@ function AppMain() {
 
   // Filtrar los proyectos por el nombre
   const filteredProyect = useMemo(() => {
-    return projects
+    return proyects
       .filter(item =>
         item.proyect.toLowerCase().includes(proyectFilter.toLowerCase())
       )
