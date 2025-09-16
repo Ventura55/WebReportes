@@ -536,16 +536,9 @@ function AppMain() {
   })
 
   const [projects, setProjects] = useState([
-    {
-      id: "1",
-      proyect: "Proyecto de prueba",
-      subpriority: 1,
-      dateStart: "2025-09-01",
-      dateEnd: "2025-09-15",
-      description: "Esto es solo un test local",
-      priority: "media",
-      completed: 0
-    }
+    
+      //id: "1",proyect: "Proyecto de prueba",subpriority: 1,dateStart: "2025-09-01",dateEnd: "2025-09-15",description: "Esto es solo un test local",priority: "media",completed: 0
+    
   ]);
 
   // Filtrar datos de registro por usuario
