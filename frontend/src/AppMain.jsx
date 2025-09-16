@@ -78,26 +78,6 @@ function AppMain() {
     };
   }, [showMenu]);
 
-
-  // Filtrar datos de registro por usuario
-  const filteredHistory = historial.filter((item) => item.user.toLowerCase().includes(usernameFilter.toLowerCase()));
-
-  // Filtrar los proyectos por el nombre
-  const filteredProyect = useMemo(() => {
-    return projects
-      .filter(proyec => {
-        if (filters.incomplete && proyec.completed === 1) return false;
-        if (filters.completed && proyec.completed !== 1) return false;
-        return true;
-      })
-      .sort((a, b) => {
-        const getPriority = (p) => priorityReport[p?.toLowerCase()] ?? 999;
-        const priorityDiff = getPriority(a.priority) - getPriority(b.priority);
-        if (priorityDiff !== 0) return priorityDiff;
-        return a.subpriority - b.subpriority;
-      });
-  }, [projects, filters]);
-
   // Nuevo Registro
   const [showForm, setShowForm] = useState(false);
   const [showInform, setShowInform] = useState(false);
@@ -555,7 +535,37 @@ function AppMain() {
     incomplete: false
   })
 
-  const [projects, setProjects] = useState([]);
+  const [projects, setProjects] = useState([
+    {
+      id: "1",
+      proyect: "Proyecto de prueba",
+      subpriority: 1,
+      dateStart: "2025-09-01",
+      dateEnd: "2025-09-15",
+      description: "Esto es solo un test local",
+      priority: "media",
+      completed: 0
+    }
+  ]);
+
+  // Filtrar datos de registro por usuario
+  const filteredHistory = historial.filter((item) => item.user.toLowerCase().includes(usernameFilter.toLowerCase()));
+
+  // Filtrar los proyectos por el nombre
+  const filteredProyect = useMemo(() => {
+    return projects
+      .filter(proyec => {
+        if (filters.incomplete && proyec.completed === 1) return false;
+        if (filters.completed && proyec.completed !== 1) return false;
+        return true;
+      })
+      .sort((a, b) => {
+        const getPriority = (p) => priorityReport[p?.toLowerCase()] ?? 999;
+        const priorityDiff = getPriority(a.priority) - getPriority(b.priority);
+        if (priorityDiff !== 0) return priorityDiff;
+        return a.subpriority - b.subpriority;
+      });
+  }, [projects, filters]);
 
   const changeSubpriority = (id, diff) => {
     setProjects((prev) => {
@@ -729,9 +739,7 @@ function AppMain() {
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredProyect
-                    //id: "1", proyect: "Proyecto de prueba", subpriority: 1, dateStart: "2025-09-01", dateEnd: "2025-09-15", description: "Esto es solo un test local", priority: "media", completed: 0
-                  .map((proyec, index) => (
+                  {filteredProyect.map((proyec, index) => (
                     <tr key={index}>
                       {editingId === proyec.id ? (
                         <td className="priority-edit-cell">
