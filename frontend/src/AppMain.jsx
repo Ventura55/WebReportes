@@ -23,7 +23,9 @@ function AppMain() {
 
   // Select de los nuevos registros
   const [user, setUser] = useState([]);
-  const [proyects, setProyects] = useState([]);
+  const [proyects, setProyects] = useState([
+    //id: "1",proyect: "Proyecto de prueba",subpriority: 1,dateStart: "2025-09-01",dateEnd: "2025-09-15",description: "Esto es solo un test local",priority: "media",completed: 0
+  ]);
   const [task, setTask] = useState([]);
   const [report, setReport] = useState([])
   const [log, setLog] = useState([]);
@@ -534,12 +536,6 @@ function AppMain() {
     incomplete: false
   })
 
-  const [projects, setProjects] = useState([
-    
-      //id: "1",proyect: "Proyecto de prueba",subpriority: 1,dateStart: "2025-09-01",dateEnd: "2025-09-15",description: "Esto es solo un test local",priority: "media",completed: 0
-    
-  ]);
-
   // Filtrar datos de registro por usuario
   const filteredHistory = historial.filter((item) => item.user.toLowerCase().includes(usernameFilter.toLowerCase()));
 
@@ -560,10 +556,10 @@ function AppMain() {
         if (priorityDiff !== 0) return priorityDiff;
         return a.subpriority - b.subpriority;
       });
-  }, [projects, filters, proyectFilter]);
+  }, [proyects, filters, proyectFilter]);
 
   const changeSubpriority = (id, diff) => {
-    setProjects((prev) => {
+    setProyects((prev) => {
       if (!Array.isArray(prev)) {
         console.error('[changeSubpriority] projects NO es array:', prev);
         return prev;
@@ -640,8 +636,6 @@ function AppMain() {
       return updated;
     });
   };
-
-
 
   const logout = () => {
     navigate("/");
