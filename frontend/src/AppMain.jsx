@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import './AppMain.css'
 import { User, Calendar, ClipboardPenLine, Plus, ArrowLeft, Trash2, Check, ClipboardList, ClipboardPen, Clipboard, X, BookOpenText, Logs, FileCheck, FilePlus, ListFilterPlus, Edit } from 'lucide-react';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -83,7 +83,20 @@ function AppMain() {
   const filteredHistory = historial.filter((item) => item.user.toLowerCase().includes(usernameFilter.toLowerCase()));
 
   // Filtrar los proyectos por el nombre
-  const filteredProyect = proyects.filter((item) => item.proyect.toLowerCase().includes(proyectFilter.toLowerCase()));
+  const filteredProyect = useMemo(() => {
+    return projects
+      .filter(proyec => {
+        if (filters.incomplete && proyec.completed === 1) return false;
+        if (filters.completed && proyec.completed !== 1) return false;
+        return true;
+      })
+      .sort((a, b) => {
+        const getPriority = (p) => priorityReport[p?.toLowerCase()] ?? 999;
+        const priorityDiff = getPriority(a.priority) - getPriority(b.priority);
+        if (priorityDiff !== 0) return priorityDiff;
+        return a.subpriority - b.subpriority;
+      });
+  }, [projects, filters]);
 
   // Nuevo Registro
   const [showForm, setShowForm] = useState(false);
@@ -545,49 +558,79 @@ function AppMain() {
   const [projects, setProjects] = useState([]);
 
   const changeSubpriority = (id, diff) => {
-    console.log('[DEBUG] changeSubpriority called -> id:', id, ' diff:', diff);
-    console.log('[DEBUG] projects length:', projects.length);
-
     setProjects((prev) => {
-      const updated = [...prev];
-
-      // Proyecto actual
-      const index = updated.findIndex((p) => p.id === id);
-      const current = { ...updated[index] }; // ← clonamos
-      if (!current) return prev;
-
-      // Filtrar solo los de la misma prioridad
-      const samePriority = updated
-        .filter((p) => p.priority === current.priority)
-        .sort((a, b) => a.subpriority - b.subpriority);
-
-      // Posición dentro de su grupo
-      const pos = samePriority.findIndex((p) => p.id === id);
-      const targetPos = pos + diff;
-
-      // Si se sale del rango → no hacer nada
-      if (targetPos < 0 || targetPos >= samePriority.length) {
+      if (!Array.isArray(prev)) {
+        console.error('[changeSubpriority] projects NO es array:', prev);
         return prev;
       }
 
-      // Vecino con el que intercambia
-      const neighborIndex = updated.findIndex(
-        (p) => p.id === samePriority[targetPos].id
-      );
-      const neighbor = { ...updated[neighborIndex] };
+      // clonamos array y objetos (no mutamos)
+      const updated = prev.map(p => ({ ...p }));
 
-      // Intercambiar subpriority
-      const temp = current.subpriority;
-      current.subpriority = neighbor.subpriority;
-      neighbor.subpriority = temp;
+      // buscar por id tolerando string/number
+      const idStr = String(id);
+      const index = updated.findIndex(p => String(p.id) === idStr);
+      if (index === -1) {
+        console.warn('[changeSubpriority] id no encontrado en projects:', id);
+        return prev;
+      }
 
-      // Actualizar en el array
-      updated[index] = current;
-      updated[neighborIndex] = neighbor;
+      const current = updated[index];
+      if (!('subpriority' in current)) {
+        console.warn('[changeSubpriority] proyecto sin subpriority:', current);
+        return prev;
+      }
 
-      // Guardar automáticamente en BD
-      handleSaveEdit(current.id, current);
-      handleSaveEdit(neighbor.id, neighbor);
+      // obtener grupo de misma prioridad ordenado por subpriority (numérico)
+      const samePriority = updated
+        .filter(p => p.priority === current.priority)
+        .sort((a, b) => Number(a.subpriority) - Number(b.subpriority));
+
+      const pos = samePriority.findIndex(p => String(p.id) === idStr);
+      const targetPos = pos + diff;
+
+      if (targetPos < 0 || targetPos >= samePriority.length) {
+        console.log('[changeSubpriority] no se puede mover (ya es primer/último)');
+        return prev;
+      }
+
+      // neighbor id y su index real dentro de `updated`
+      const neighborId = samePriority[targetPos].id;
+      const neighborIndex = updated.findIndex(p => String(p.id) === String(neighborId));
+      if (neighborIndex === -1) {
+        console.error('[changeSubpriority] neighbor no encontrado:', neighborId);
+        return prev;
+      }
+
+      // clonamos ambos, swap de subpriority
+      const curClone = { ...updated[index] };
+      const neighClone = { ...updated[neighborIndex] };
+      const tmp = curClone.subpriority;
+      curClone.subpriority = neighClone.subpriority;
+      neighClone.subpriority = tmp;
+
+      // escribir de nuevo en array
+      updated[index] = curClone;
+      updated[neighborIndex] = neighClone;
+
+      console.log('[changeSubpriority] swap realizado:', {
+        moved: curClone.id, newSub: curClone.subpriority,
+        swappedWith: neighClone.id, newSubNeighbor: neighClone.subpriority
+      });
+
+      // llamada optimista al backend (no bloquear el setState)
+      // Si handleSaveEdit devuelve Promise puedes capturar errores
+      try {
+        handleSaveEdit(curClone.id, curClone).catch(e => {
+          console.error('save current failed', e);
+          // opcional: rollback o re-fetch
+        });
+        handleSaveEdit(neighClone.id, neighClone).catch(e => {
+          console.error('save neighbor failed', e);
+        });
+      } catch (err) {
+        console.error('handleSaveEdit threw', err);
+      }
 
       return updated;
     });
@@ -686,26 +729,9 @@ function AppMain() {
                   </tr>
                 </thead>
                 <tbody>
-                  {[...filteredProyect, {
-                    id: "1", proyect: "Proyecto de prueba", subpriority: 1, dateStart: "2025-09-01", dateEnd: "2025-09-15", description: "Esto es solo un test local", priority: "media", completed: 0
-                  }
-                  ].filter(proyec => {
-                    if (filters.incomplete && proyec.completed === 1) {
-                      return false
-                    }
-
-                    if (filters.completed && proyec.completed !== 1) {
-                      return false;
-                    }
-                    return true;
-                  }).sort((a, b) => {
-                    const getPriority = (p) => priorityReport[p?.toLowerCase()] ?? 999;
-
-                    const priorityDiff = getPriority(a.priority) - getPriority(b.priority);
-                    if (priorityDiff !== 0) return priorityDiff;
-
-                    return a.subpriority - b.subpriority;
-                  }).map((proyec, index) => (
+                  {filteredProyect
+                    //id: "1", proyect: "Proyecto de prueba", subpriority: 1, dateStart: "2025-09-01", dateEnd: "2025-09-15", description: "Esto es solo un test local", priority: "media", completed: 0
+                  .map((proyec, index) => (
                     <tr key={index}>
                       {editingId === proyec.id ? (
                         <td className="priority-edit-cell">
@@ -777,7 +803,6 @@ function AppMain() {
                               </>
                             )}
                           </div>
-
                         </div>
                       </td>
                     </tr>
