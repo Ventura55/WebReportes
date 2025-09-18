@@ -439,8 +439,8 @@ function AppMain() {
     setEditForm({ ...editForm, [name]: value });
   };
 
-  const handleSaveEdit = (id, proyecto) => {
-    axios.put(`http://tareas.quirosingenieria.es:8081/api/history/edit/proyect/${id}`, proyecto, {
+  const handleSaveEdit = (id, editForm) => {
+    axios.put(`http://tareas.quirosingenieria.es:8081/api/history/edit/proyect/${id}`, editForm, {
       auth: {
         username,
         password
