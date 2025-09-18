@@ -439,8 +439,8 @@ function AppMain() {
     setEditForm({ ...editForm, [name]: value });
   };
 
-  const handleSaveEdit = (id) => {
-    axios.put(`http://tareas.quirosingenieria.es:8081/api/history/edit/proyect/${id}`, editForm, {
+  const handleSaveEdit = (id, proyecto) => {
+    axios.put(`http://tareas.quirosingenieria.es:8081/api/history/edit/proyect/${id}`, proyecto, {
       auth: {
         username,
         password
@@ -450,9 +450,11 @@ function AppMain() {
       setProyects((prev) =>
         prev.map((p) => (p.id === id ? { ...p, ...editForm } : p)));
       setEditingId(null);
+      return res.data;
     }).catch(err => {
       console.error("Error al actualizar proyecto:", err);
       console.log("editForm", editForm);
+      throw err;
     });
   };
 

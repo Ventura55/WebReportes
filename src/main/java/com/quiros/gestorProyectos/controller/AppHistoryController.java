@@ -134,8 +134,9 @@ public class AppHistoryController {
     }
 
     @PutMapping("/edit/proyect/{id}")
-    public ResponseEntity<?> editProyect(@RequestBody AppProyect editProyect) {
+    public ResponseEntity<?> editProyect(@PathVariable Long id, @RequestBody AppProyect editProyect) {
         try {
+            editProyect.setId(id);
             AppProyect proyect = appProyectDetailsService.editProyect(editProyect);
             return ResponseEntity.ok(proyect);
         } catch (RuntimeException e) {
