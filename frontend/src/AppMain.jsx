@@ -714,8 +714,10 @@ function AppMain() {
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredProyect.map((proyec, index) => (
-                    <tr key={index} onClick={() => setShowForm(true)}>
+                  {[...filteredProyect, {
+                    id: "87", proyect: "Proyecto de prueba (local)", dateStart: "2025-09-22", dateEnd: "2025-09-30", description: "Solo visible en frontend", completed: 0, priority: "media", subpriority: 1
+                  }].map((proyec, index) => (
+                    <tr key={index}>
                       {editingId === proyec.id ? (
                         <td className="priority-edit-cell">
                           <div
@@ -746,25 +748,26 @@ function AppMain() {
                               : 'priority-baja'
                             }`}
                           title={proyec.priority}
+                          onClick={() => {setFormData(prev => ({ ...prev, proyect: proyec.proyect })); setShowForm(true);}}
                         />
                       )}
 
-                      <td>
+                      <td onClick={() => {setFormData(prev => ({ ...prev, proyect: proyec.proyect })); setShowForm(true)}}>
                         {editingId === proyec.id ? (
                           <input name='proyect' value={editForm.proyect} onChange={handleEditChange} />
                         ) : (proyec.proyect)}
                       </td>
-                      <td>
+                      <td onClick={() => {setFormData(prev => ({ ...prev, proyect: proyec.proyect })); setShowForm(true)}}>
                         {editingId === proyec.id ? (
                           <input type='date' name='dateStart' value={editForm.dateStart} onChange={handleEditChange} />
                         ) : (proyec.dateStart)}
                       </td>
-                      <td>
+                      <td onClick={() => {setFormData(prev => ({ ...prev, proyect: proyec.proyect })); setShowForm(true)}}>
                         {editingId === proyec.id ? (
                           <input type='date' name='dateEnd' value={editForm.dateEnd} onChange={handleEditChange} />
                         ) : (proyec.dateEnd)}
                       </td>
-                      <td>
+                      <td onClick={() => {setFormData(prev => ({ ...prev, proyect: proyec.proyect })); setShowForm(true)}}>
                         {editingId === proyec.id ? (
                           <textarea name='description' value={editForm.description} onChange={handleEditChange} />
                         ) : (proyec.description)}
@@ -803,8 +806,7 @@ function AppMain() {
                           <option key={users.id} value={users.username}>{users.username}</option>
                         ))}
                       </select>
-                      <select name='proyect' placeholder='Proyecto' value={formData.proyect} onChange={handleChange} required>
-                        <option value="">Seleccion un proyecto</option>
+                      <select name='proyect' placeholder='Proyecto' value={formData.proyect} onChange={handleChange} disabled={!!formData.proyect} required>
                         {proyects.filter((proyec) => Number(proyec.completed) === 0)
                           .map((proyec) => (
                             <option key={proyec.id} value={proyec.proyect}>{proyec.proyect}</option>
