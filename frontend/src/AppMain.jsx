@@ -441,19 +441,16 @@ function AppMain() {
 
   const handleSaveEdit = (id, data = editForm) => {
     axios.put(`http://tareas.quirosingenieria.es:8081/api/history/edit/proyect/${id}`, data, {
-      auth: {
-        username,
-        password
-      }
+      auth: { username, password }
     }).then(res => {
-      alert(res.data.messaage || "Proyecto actualizado");
+      alert(res.data.message || "Proyecto actualizado");
       setProyects((prev) =>
-        prev.map((p) => (p.id === id ? { ...p, ...editForm } : p)));
+        prev.map((p) => (p.id === id ? { ...p, ...data  } : p)));
       setEditingId(null);
       return res.data;
     }).catch(err => {
       console.error("Error al actualizar proyecto:", err);
-      console.log("editForm", editForm);
+      console.log("data enviada", data);
       throw err;
     });
   };
@@ -560,6 +557,7 @@ function AppMain() {
       });
   }, [proyects, filters, proyectFilter]);
 
+  // Cambiar subprioridad
   const changeSubpriority = (id, diff) => {
   setProyects((prev) => {
     if (!Array.isArray(prev)) {
@@ -567,7 +565,6 @@ function AppMain() {
       return prev;
     }
 
-    // buscar por id tolerando string/number
     const idStr = String(id);
     const current = prev.find(p => String(p.id) === idStr);
     if (!current) {
@@ -593,7 +590,6 @@ function AppMain() {
       return prev;
     }
 
-    // proyecto vecino
     const neighbor = samePriority[targetPos];
 
     // construir nuevo array con swap seguro
@@ -612,21 +608,17 @@ function AppMain() {
       swappedWith: neighbor.id, newSubNeighbor: current.subpriority
     });
 
-    // llamada optimista al backend
-    try {
-      handleSaveEdit(current.id, { ...current, subpriority: neighbor.subpriority }).catch(e => {
-        console.error('save current failed', e);
-      });
-      handleSaveEdit(neighbor.id, { ...neighbor, subpriority: current.subpriority }).catch(e => {
-        console.error('save neighbor failed', e);
-      });
-    } catch (err) {
-      console.error('handleSaveEdit threw', err);
-    }
+    // llamadas optimistas al backend
+    handleSaveEdit(current.id, { ...current, subpriority: neighbor.subpriority })
+      .catch(e => console.error('save current failed', e));
+
+    handleSaveEdit(neighbor.id, { ...neighbor, subpriority: current.subpriority })
+      .catch(e => console.error('save neighbor failed', e));
 
     return updated;
   });
 };
+
 
   const logout = () => {
     navigate("/");
