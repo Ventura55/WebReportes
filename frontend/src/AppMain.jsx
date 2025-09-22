@@ -617,6 +617,7 @@ function AppMain() {
         { auth: { username, password } }
       ).then(() => console.log("Swap OK en backend")).catch((e) => console.error("Swap fail", e));
 
+      setEditingId(false);
       return updated;
     });
   };
@@ -714,7 +715,7 @@ function AppMain() {
                 </thead>
                 <tbody>
                   {filteredProyect.map((proyec, index) => (
-                    <tr key={index}>
+                    <tr key={index} onClick={() => setShowForm(true)}>
                       {editingId === proyec.id ? (
                         <td className="priority-edit-cell">
                           <div
@@ -791,6 +792,38 @@ function AppMain() {
                   ))}
                 </tbody>
               </table>
+              {showForm && (
+                <div className='modal-overlay'>
+                  <div className='modal'>
+                    <h2>Nuevo Registro de Horas</h2>
+                    <form onSubmit={handleSubmit}>
+                      <select name='username' placeholder='Usuario' value={formData.username} onChange={handleChange} required>
+                        <option value="">Selecciona un usuario</option>
+                        {user.map((users) => (
+                          <option key={users.id} value={users.username}>{users.username}</option>
+                        ))}
+                      </select>
+                      <select name='proyect' placeholder='Proyecto' value={formData.proyect} onChange={handleChange} required>
+                        <option value="">Seleccion un proyecto</option>
+                        {proyects.filter((proyec) => Number(proyec.completed) === 0)
+                          .map((proyec) => (
+                            <option key={proyec.id} value={proyec.proyect}>{proyec.proyect}</option>
+                          ))}
+                      </select>
+                      <select name='task' placeholder='Tarea' value={formData.task} onChange={handleChange} required>
+                        <option value="">Selecciona una tarea</option>
+                        {task.map((tasks) => (
+                          <option key={tasks.id} value={tasks.task}>{tasks.task}</option>
+                        ))}
+                      </select>
+                      <input name='hours' placeholder='Horas' value={formData.hours} onChange={handleChange} required />
+                      <textarea name='description' placeholder='Descripcion' value={formData.description} onChange={handleChange} />
+                      <button type='submit'>Guardar</button>
+                      <button type='button' onClick={() => setShowForm(false)}>Cancelar</button>
+                    </form>
+                  </div>
+                </div>
+              )}
             </>
           )}
 
