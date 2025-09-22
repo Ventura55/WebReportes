@@ -439,8 +439,8 @@ function AppMain() {
     setEditForm({ ...editForm, [name]: value });
   };
 
-  const handleSaveEdit = (id, editForm) => {
-    axios.put(`http://tareas.quirosingenieria.es:8081/api/history/edit/proyect/${id}`, editForm, {
+  const handleSaveEdit = (id, data = editForm) => {
+    axios.put(`http://tareas.quirosingenieria.es:8081/api/history/edit/proyect/${id}`, data, {
       auth: {
         username,
         password
@@ -561,83 +561,72 @@ function AppMain() {
   }, [proyects, filters, proyectFilter]);
 
   const changeSubpriority = (id, diff) => {
-    setProyects((prev) => {
-      if (!Array.isArray(prev)) {
-        console.error('[changeSubpriority] projects NO es array:', prev);
-        return prev;
+  setProyects((prev) => {
+    if (!Array.isArray(prev)) {
+      console.error('[changeSubpriority] projects NO es array:', prev);
+      return prev;
+    }
+
+    // buscar por id tolerando string/number
+    const idStr = String(id);
+    const current = prev.find(p => String(p.id) === idStr);
+    if (!current) {
+      console.warn('[changeSubpriority] id no encontrado en projects:', id);
+      return prev;
+    }
+
+    if (!('subpriority' in current)) {
+      console.warn('[changeSubpriority] proyecto sin subpriority:', current);
+      return prev;
+    }
+
+    // obtener grupo de misma prioridad ordenado por subpriority (numérico)
+    const samePriority = prev
+      .filter(p => p.priority === current.priority)
+      .sort((a, b) => Number(a.subpriority) - Number(b.subpriority));
+
+    const pos = samePriority.findIndex(p => String(p.id) === idStr);
+    const targetPos = pos + diff;
+
+    if (targetPos < 0 || targetPos >= samePriority.length) {
+      console.log('[changeSubpriority] no se puede mover (ya es primer/último)');
+      return prev;
+    }
+
+    // proyecto vecino
+    const neighbor = samePriority[targetPos];
+
+    // construir nuevo array con swap seguro
+    const updated = prev.map(p => {
+      if (String(p.id) === idStr) {
+        return { ...p, subpriority: neighbor.subpriority };
       }
-
-      // clonamos array y objetos (no mutamos)
-      const updated = prev.map(p => ({ ...p }));
-
-      // buscar por id tolerando string/number
-      const idStr = String(id);
-      const index = updated.findIndex(p => String(p.id) === idStr);
-      if (index === -1) {
-        console.warn('[changeSubpriority] id no encontrado en projects:', id);
-        return prev;
+      if (String(p.id) === String(neighbor.id)) {
+        return { ...p, subpriority: current.subpriority };
       }
-
-      const current = updated[index];
-      if (!('subpriority' in current)) {
-        console.warn('[changeSubpriority] proyecto sin subpriority:', current);
-        return prev;
-      }
-
-      // obtener grupo de misma prioridad ordenado por subpriority (numérico)
-      const samePriority = updated
-        .filter(p => p.priority === current.priority)
-        .sort((a, b) => Number(a.subpriority) - Number(b.subpriority));
-
-      const pos = samePriority.findIndex(p => String(p.id) === idStr);
-      const targetPos = pos + diff;
-
-      if (targetPos < 0 || targetPos >= samePriority.length) {
-        console.log('[changeSubpriority] no se puede mover (ya es primer/último)');
-        return prev;
-      }
-
-      // neighbor id y su index real dentro de `updated`
-      const neighborId = samePriority[targetPos].id;
-      const neighborIndex = updated.findIndex(p => String(p.id) === String(neighborId));
-      if (neighborIndex === -1) {
-        console.error('[changeSubpriority] neighbor no encontrado:', neighborId);
-        return prev;
-      }
-
-      // clonamos ambos, swap de subpriority
-      const curClone = { ...updated[index] };
-      const neighClone = { ...updated[neighborIndex] };
-      const tmp = curClone.subpriority;
-      curClone.subpriority = neighClone.subpriority;
-      neighClone.subpriority = tmp;
-
-      // escribir de nuevo en array
-      updated[index] = curClone;
-      updated[neighborIndex] = neighClone;
-
-      console.log('[changeSubpriority] swap realizado:', {
-        moved: curClone.id, newSub: curClone.subpriority,
-        swappedWith: neighClone.id, newSubNeighbor: neighClone.subpriority
-      });
-
-      // llamada optimista al backend (no bloquear el setState)
-      // Si handleSaveEdit devuelve Promise puedes capturar errores
-      try {
-        handleSaveEdit(curClone.id, curClone).catch(e => {
-          console.error('save current failed', e);
-          // opcional: rollback o re-fetch
-        });
-        handleSaveEdit(neighClone.id, neighClone).catch(e => {
-          console.error('save neighbor failed', e);
-        });
-      } catch (err) {
-        console.error('handleSaveEdit threw', err);
-      }
-
-      return updated;
+      return p;
     });
-  };
+
+    console.log('[changeSubpriority] swap realizado:', {
+      moved: current.id, newSub: neighbor.subpriority,
+      swappedWith: neighbor.id, newSubNeighbor: current.subpriority
+    });
+
+    // llamada optimista al backend
+    try {
+      handleSaveEdit(current.id, { ...current, subpriority: neighbor.subpriority }).catch(e => {
+        console.error('save current failed', e);
+      });
+      handleSaveEdit(neighbor.id, { ...neighbor, subpriority: current.subpriority }).catch(e => {
+        console.error('save neighbor failed', e);
+      });
+    } catch (err) {
+      console.error('handleSaveEdit threw', err);
+    }
+
+    return updated;
+  });
+};
 
   const logout = () => {
     navigate("/");
