@@ -135,6 +135,17 @@ public class AppHistoryController {
         }
     }
 
+    @PutMapping("/edit/proyect/{id}")
+    public ResponseEntity<?> editProyect(@PathVariable Long id, @RequestBody AppProyect editProyect) {
+        try {
+            editProyect.setId(id);
+            AppProyect proyect = appProyectDetailsService.editProyect(editProyect);
+            return ResponseEntity.ok(proyect);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
+
     @PutMapping("/swapSubpriority")
     public ResponseEntity<?> swapSubpriority(@RequestParam Long id1, @RequestParam Long id2) {
         AppProyect p1 = appProyectRepository.findById(id1).orElseThrow();
