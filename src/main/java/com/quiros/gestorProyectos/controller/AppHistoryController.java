@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.quiros.gestorProyectos.entity.AppHistory;
@@ -102,8 +103,9 @@ public class AppHistoryController {
 
     @PostMapping("/create/proyect")
     public ResponseEntity<?> createProyect(@RequestBody CreateProyectRequest request) {
-        AppProyect appProyect = appProyectDetailsService.createProyect(request.getPriority(), request.getProyect(), request.getDateStart(),
-         request.getDateEnd(), request.getDescription(), request.getComplete());
+        AppProyect appProyect = appProyectDetailsService.createProyect(request.getPriority(), request.getProyect(),
+                request.getDateStart(),
+                request.getDateEnd(), request.getDescription(), request.getComplete());
         return ResponseEntity.ok("El proyecto fue creado, " + appProyect);
     }
 
@@ -133,14 +135,19 @@ public class AppHistoryController {
         }
     }
 
-    @PutMapping("/edit/proyect/{id}")
-    public ResponseEntity<?> editProyect(@PathVariable Long id, @RequestBody AppProyect editProyect) {
-        try {
-            AppProyect proyect = appProyectDetailsService.editProyect(editProyect);
-            return ResponseEntity.ok(proyect);
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
+    @PutMapping("/swapSubpriority")
+    public ResponseEntity<?> swapSubpriority(@RequestParam Long id1, @RequestParam Long id2) {
+        AppProyect p1 = appProyectRepository.findById(id1).orElseThrow();
+        AppProyect p2 = appProyectRepository.findById(id2).orElseThrow();
+
+        int tmp = p1.getSubpriority();
+        p1.setSubpriority(p2.getSubpriority());
+        p2.setSubpriority(tmp);
+
+        appProyectRepository.save(p1);
+        appProyectRepository.save(p2);
+
+        return ResponseEntity.ok("Swap realizado");
     }
 
     @PostMapping("/create/task")
@@ -180,7 +187,8 @@ public class AppHistoryController {
             }
         } catch (Exception e) {
             e.printStackTrace(); // imprime el error en la consola del backend
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error interno al completar el reporte: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error interno al completar el reporte: " + e.getMessage());
         }
     }
 }

@@ -445,7 +445,7 @@ function AppMain() {
     }).then(res => {
       alert(res.data.message || "Proyecto actualizado");
       setProyects((prev) =>
-        prev.map((p) => (p.id === id ? { ...p, ...data  } : p)));
+        prev.map((p) => (p.id === id ? { ...p, ...data } : p)));
       setEditingId(null);
       return res.data;
     }).catch(err => {
@@ -559,65 +559,67 @@ function AppMain() {
 
   // Cambiar subprioridad
   const changeSubpriority = (id, diff) => {
-  setProyects((prev) => {
-    if (!Array.isArray(prev)) {
-      console.error('[changeSubpriority] projects NO es array:', prev);
-      return prev;
-    }
-
-    const idStr = String(id);
-    const current = prev.find(p => String(p.id) === idStr);
-    if (!current) {
-      console.warn('[changeSubpriority] id no encontrado en projects:', id);
-      return prev;
-    }
-
-    if (!('subpriority' in current)) {
-      console.warn('[changeSubpriority] proyecto sin subpriority:', current);
-      return prev;
-    }
-
-    // obtener grupo de misma prioridad ordenado por subpriority (numérico)
-    const samePriority = prev
-      .filter(p => p.priority === current.priority)
-      .sort((a, b) => Number(a.subpriority) - Number(b.subpriority));
-
-    const pos = samePriority.findIndex(p => String(p.id) === idStr);
-    const targetPos = pos + diff;
-
-    if (targetPos < 0 || targetPos >= samePriority.length) {
-      console.log('[changeSubpriority] no se puede mover (ya es primer/último)');
-      return prev;
-    }
-
-    const neighbor = samePriority[targetPos];
-
-    // construir nuevo array con swap seguro
-    const updated = prev.map(p => {
-      if (String(p.id) === idStr) {
-        return { ...p, subpriority: neighbor.subpriority };
+    setProyects((prev) => {
+      if (!Array.isArray(prev)) {
+        console.error('[changeSubpriority] projects NO es array:', prev);
+        return prev;
       }
-      if (String(p.id) === String(neighbor.id)) {
-        return { ...p, subpriority: current.subpriority };
+
+      // buscar por id tolerando string/number
+      const idStr = String(id);
+      const current = prev.find(p => String(p.id) === idStr);
+      if (!current) {
+        console.warn('[changeSubpriority] id no encontrado en projects:', id);
+        return prev;
       }
-      return p;
+
+      if (!('subpriority' in current)) {
+        console.warn('[changeSubpriority] proyecto sin subpriority:', current);
+        return prev;
+      }
+
+      // obtener grupo de misma prioridad ordenado por subpriority (numérico)
+      const samePriority = prev
+        .filter(p => p.priority === current.priority)
+        .sort((a, b) => Number(a.subpriority) - Number(b.subpriority));
+
+      const pos = samePriority.findIndex(p => String(p.id) === idStr);
+      const targetPos = pos + diff;
+
+      if (targetPos < 0 || targetPos >= samePriority.length) {
+        console.log('[changeSubpriority] no se puede mover (ya es primer/último)');
+        return prev;
+      }
+
+      // proyecto vecino
+      const neighbor = samePriority[targetPos];
+
+      // construir nuevo array con swap seguro
+      const updated = prev.map(p => {
+        if (String(p.id) === idStr) {
+          return { ...p, subpriority: neighbor.subpriority };
+        }
+        if (String(p.id) === String(neighbor.id)) {
+          return { ...p, subpriority: current.subpriority };
+        }
+        return p;
+      });
+
+      console.log('[changeSubpriority] swap realizado:', {
+        moved: current.id, newSub: neighbor.subpriority,
+        swappedWith: neighbor.id, newSubNeighbor: current.subpriority
+      });
+
+      // 👉 ahora solo llamamos al nuevo endpoint swapSubpriority
+      axios.put(
+        `http://tareas.quirosingenieria.es:8081/api/history/swapSubpriority?id1=${current.id}&id2=${neighbor.id}`,
+        {},
+        { auth: { username, password } }
+      ).then(() => console.log("Swap OK en backend")).catch((e) => console.error("Swap fail", e));
+
+      return updated;
     });
-
-    console.log('[changeSubpriority] swap realizado:', {
-      moved: current.id, newSub: neighbor.subpriority,
-      swappedWith: neighbor.id, newSubNeighbor: current.subpriority
-    });
-
-    // llamadas optimistas al backend
-    handleSaveEdit(current.id, { ...current, subpriority: neighbor.subpriority })
-      .catch(e => console.error('save current failed', e));
-
-    handleSaveEdit(neighbor.id, { ...neighbor, subpriority: current.subpriority })
-      .catch(e => console.error('save neighbor failed', e));
-
-    return updated;
-  });
-};
+  };
 
 
   const logout = () => {
