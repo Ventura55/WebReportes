@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import './AppMain.css'
-import { User, Calendar, ClipboardPenLine, Plus, ArrowLeft, Trash2, Check, ClipboardList, ClipboardPen, Clipboard, X, BookOpenText, Logs, FileCheck, FilePlus, ListFilterPlus, Edit } from 'lucide-react';
+import { User, Calendar, ClipboardPenLine, Plus, ArrowLeft, Trash2, Check, ClipboardList, ClipboardPen, Clipboard, X, BookOpenText, Logs, FileCheck, FilePlus, ListFilterPlus, Edit, ChevronDown } from 'lucide-react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios'
 import { PDFDocument } from 'pdf-lib';
@@ -154,8 +154,8 @@ function AppMain() {
     e.preventDefault();
     axios.post('http://tareas.quirosingenieria.es:8081/api/history/create/history', formData, {
       auth: {
-        username: 'ventu',
-        password: '123'
+        username: username,
+        password: password
       }
     }).then(res => {
       alert(res.data.message || "Registro guardado con éxito");
@@ -164,7 +164,7 @@ function AppMain() {
         setHistorial(prev => [...prev, res.data.newHistory]);
       } else {
         axios.get('http://tareas.quirosingenieria.es:8081/api/history', {
-          auth: { username: 'ventu', password: '123' }
+          auth: { username: username, password: password }
         }).then(res => {
           setHistorial(res.data);
         }).catch(err => {
@@ -203,8 +203,8 @@ function AppMain() {
     e.preventDefault();
     axios.post('http://tareas.quirosingenieria.es:8081/api/history/create/proyect', formProyect, {
       auth: {
-        username: 'ventu',
-        password: '123'
+        username: username,
+        password: password
       }
     }).then(res => {
       alert(res.data.message || "Proyecto guardado con éxito");
@@ -213,7 +213,7 @@ function AppMain() {
         setProyects(prev => [...prev, res.data.newProyect]);
       } else {
         axios.get('http://tareas.quirosingenieria.es:8081/api/history/proyect', {
-          auth: { username: 'ventu', password: '123' }
+          auth: { username: username, password: password }
         }).then(res => {
           setProyects(res.data);
         }).catch(err => {
@@ -230,8 +230,8 @@ function AppMain() {
   const handleDeleteProyect = (id) => {
     axios.delete(`http://tareas.quirosingenieria.es:8081/api/history/delete/proyect/${id}`, {
       auth: {
-        username: 'ventu',
-        password: '123'
+        username: username,
+        password: password
       }
     }).then(() => {
       setProyects(prev => prev.filter(p => p.id !== id));
@@ -245,8 +245,8 @@ function AppMain() {
       { completed: newStatus ? 1 : 0 },
       {
         auth: {
-          username: 'ventu',
-          password: '123'
+          username: username,
+          password: password
         }
       }
     ).then(res => {
@@ -272,8 +272,8 @@ function AppMain() {
     e.preventDefault();
     axios.post('http://tareas.quirosingenieria.es:8081/api/history/create/task', formTask, {
       auth: {
-        username: 'ventu',
-        password: '123'
+        username: username,
+        password: password
       }
     }).then(res => {
       alert(res.data.message || "Tarea guardado con éxito");
@@ -282,7 +282,7 @@ function AppMain() {
         setTask(prev => [...prev, res.data.newTask]);
       } else {
         axios.get('http://tareas.quirosingenieria.es:8081/api/history/task', {
-          auth: { username: 'ventu', password: '123' }
+          auth: { username: username, password: password }
         }).then(res => {
           setTask(res.data);
         }).catch(err => {
@@ -309,8 +309,8 @@ function AppMain() {
   const handleDeleteTask = (id) => {
     axios.delete(`http://tareas.quirosingenieria.es:8081/api/history/delete/task/${id}`, {
       auth: {
-        username: 'ventu',
-        password: '123'
+        username: username,
+        password: password
       }
     }).then(() => {
       setTask(prev => prev.filter(t => t.id !== id));
@@ -329,8 +329,8 @@ function AppMain() {
     e.preventDefault();
     axios.post('http://tareas.quirosingenieria.es:8081/api/history/create/report', formReport, {
       auth: {
-        username: 'ventu',
-        password: '123'
+        username: username,
+        password: password
       }
     }).then(res => {
       alert(res.data.message || "Reporte guardado con éxito");
@@ -339,7 +339,7 @@ function AppMain() {
         setReport(prev => [...prev, res.data.newReport]);
       } else {
         axios.get('http://tareas.quirosingenieria.es:8081/api/history/report', {
-          auth: { username: 'ventu', password: '123' }
+          auth: { username: username, password: password }
         }).then(res => {
           setReport(res.data);
         }).catch(err => {
@@ -357,8 +357,8 @@ function AppMain() {
     try {
       await axios.post(`http://tareas.quirosingenieria.es:8081/api/history/complete/report/${id}`, {}, {
         auth: {
-          username: 'ventu',
-          password: '123'
+          username: username,
+          password: password
         }
       }).then(res => {
         // Eliminarlo del estado del frontend (sin recargar toda la página)
@@ -368,7 +368,7 @@ function AppMain() {
           setLog(prev => [...prev, res.data.newCompleteReport]);
         } else {
           axios.get('http://tareas.quirosingenieria.es:8081/api/history/report/complete', {
-            auth: { username: 'ventu', password: '123' }
+            auth: { username: username, password: password }
           }).then(rese => {
             setLog(rese.data);
           }).catch(err => {
@@ -392,8 +392,8 @@ function AppMain() {
     e.preventDefault();
     axios.post('http://tareas.quirosingenieria.es:8081/api/user/create/user', formUser, {
       auth: {
-        username: 'ventu',
-        password: '123'
+        username: username,
+        password: password
       }
     }).then(res => {
       alert(res.data.message || "Usuario guardado con éxito");
@@ -551,6 +551,9 @@ function AppMain() {
       })
       .sort((a, b) => {
         const getPriority = (p) => priorityReport[p?.toLowerCase()] ?? 999;
+        if (a.completed !== b.completed) {
+          return a.completed === 1 ? 1: -1;
+        }
         const priorityDiff = getPriority(a.priority) - getPriority(b.priority);
         if (priorityDiff !== 0) return priorityDiff;
         return a.subpriority - b.subpriority;
@@ -610,7 +613,7 @@ function AppMain() {
         swappedWith: neighbor.id, newSubNeighbor: current.subpriority
       });
 
-      // 👉 ahora solo llamamos al nuevo endpoint swapSubpriority
+      // ahora solo llamamos al nuevo endpoint swapSubpriority
       axios.put(
         `http://tareas.quirosingenieria.es:8081/api/history/swapSubpriority?id1=${current.id}&id2=${neighbor.id}`,
         {},
@@ -634,7 +637,10 @@ function AppMain() {
         <img src="/logoQuiros.png" onClick={() => setMobileMenuOpen(true)} />
         <div className='usuario' onClick={toggleMenu}>
           <User />
-          <strong>{username}</strong>
+          <div className='usuario-name'>
+            <strong>{username}</strong>
+            <ChevronDown size={"20px"} />
+          </div>
         </div>
         {showMenu && (
           <div className='dropdown' ref={dropdownRef}>
@@ -715,6 +721,9 @@ function AppMain() {
                 </thead>
                 <tbody>
                   {[...filteredProyect, {
+                    id: "87", proyect: "Proyecto de prueba (local)", dateStart: "2025-09-22", dateEnd: "2025-09-30", description: "Solo visible en frontend", completed: 1, priority: "media", subpriority: 1
+                  },
+                  {
                     id: "87", proyect: "Proyecto de prueba (local)", dateStart: "2025-09-22", dateEnd: "2025-09-30", description: "Solo visible en frontend", completed: 0, priority: "media", subpriority: 1
                   }].map((proyec, index) => (
                     <tr key={index}>
