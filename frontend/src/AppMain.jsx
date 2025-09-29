@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import './AppMain.css'
-import { User, Calendar, ClipboardPenLine, Plus, ArrowLeft, Trash2, Check, ClipboardList, ClipboardPen, Clipboard, X, BookOpenText, Logs, FileCheck, FilePlus, ListFilterPlus, Edit, ChevronDown } from 'lucide-react';
+import { User, Calendar, ClipboardPenLine, Plus, ArrowLeft, Trash2, Check, ClipboardList, ClipboardPen, Clipboard, X, BookOpenText, Logs, FileCheck, FilePlus, ListFilterPlus, Edit, ChevronDown, ChevronUp } from 'lucide-react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios'
 import { PDFDocument } from 'pdf-lib';
@@ -78,6 +78,11 @@ function AppMain() {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [showMenu]);
+
+  // Cerrar el dropdown si ya esta abierto
+  const toggleDropdown = () => {
+    setShowMenu((prev) => !prev);
+  };
 
   // Nuevo Registro
   const [showForm, setShowForm] = useState(false);
@@ -635,11 +640,15 @@ function AppMain() {
     <div className='Main'>
       <header className='Main-header'>
         <img src="/logoQuiros.png" onClick={() => setMobileMenuOpen(true)} />
-        <div className='usuario' onClick={toggleMenu}>
+        <div className='usuario' onClick={toggleMenu} >
           <User />
-          <div className='usuario-name'>
+          <div className='usuario-name' onClick={toggleDropdown}>
             <strong>{username}</strong>
-            <ChevronDown size={"20px"} />
+            {showMenu ? (
+              <ChevronDown size={"20px"} />
+            ): (
+              <ChevronUp size={"20px"} />
+            )}
           </div>
         </div>
         {showMenu && (
