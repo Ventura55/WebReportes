@@ -66,6 +66,7 @@ main {
         font-size: 2rem;
         color: white;
         cursor: pointer;
+        display: block;
     }
 }
 
@@ -529,8 +530,6 @@ select {
     margin-left: auto;
     padding: 5px;
     padding-right: 10px;
-    border: 1px, solid, black;
-    border-radius: 5px;
 }
 
 .usuario-name {

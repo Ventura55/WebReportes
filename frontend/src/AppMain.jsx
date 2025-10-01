@@ -86,6 +86,7 @@ function AppMain() {
 
   // Nuevo Registro
   const [showForm, setShowForm] = useState(false);
+  const [showProyect, setShowProyect] = useState(false);
   const [showInform, setShowInform] = useState(false);
   const [showDescription, setShowDescription] = useState(null);
   const [formData, setFormData] = useState({
@@ -557,7 +558,7 @@ function AppMain() {
       .sort((a, b) => {
         const getPriority = (p) => priorityReport[p?.toLowerCase()] ?? 999;
         if (a.completed !== b.completed) {
-          return a.completed === 1 ? 1: -1;
+          return a.completed === 1 ? 1 : -1;
         }
         const priorityDiff = getPriority(a.priority) - getPriority(b.priority);
         if (priorityDiff !== 0) return priorityDiff;
@@ -646,7 +647,7 @@ function AppMain() {
             <strong>{username}</strong>
             {showMenu ? (
               <ChevronDown size={"20px"} />
-            ): (
+            ) : (
               <ChevronUp size={"20px"} />
             )}
           </div>
@@ -671,7 +672,9 @@ function AppMain() {
           {active === "proyectos" && (
             <>
               <button onClick={() => setActive("registro")}><Logs />Ver Logs</button>
-              <button onClick={() => setShowForm(true)}><Plus />Añadir Proyecto</button>
+              {infoUser.rol === "Admin" && (
+                <button onClick={() => setShowProyect(true)}><Plus />Añadir Proyecto</button>
+              )}
               <input className='main-input' name='proyect' placeholder='Buscar proyecto' value={proyectFilter} onChange={(e) => setProyectFilter(e.target.value)}></input>
               <div className='filter-wrapper'>
                 <button onClick={toggleFilter} className='button-filter'><ListFilterPlus />Filtrar</button>
@@ -692,7 +695,7 @@ function AppMain() {
                   </div>
                 )}
               </div>
-              {showForm && (
+              {showProyect && (
                 <div className='modal-overlay'>
                   <div className='modal'>
                     <h2>Nuevo Proyecto</h2>
@@ -708,10 +711,10 @@ function AppMain() {
                           <div className={`priority-circle green ${formProyect.priority === 'baja' ? 'selected' : ''}`} onClick={() => setFormProyect({ ...formProyect, priority: 'baja' })} title='Baja'></div>
                         </div>
                       </div>
-                      <input name='description' placeholder='Descripcion' value={formProyect.description} onChange={handleChangeProyect} />
+                      <input type='textarea' name='description' placeholder='Descripcion' value={formProyect.description} onChange={handleChangeProyect} />
                       <input type='hidden' name='priority' value={formProyect.priority} />
                       <button type='submit'>Guardar</button>
-                      <button type='button' onClick={() => setShowForm(false)}>Cancelar</button>
+                      <button type='button' onClick={() => setShowProyect(false)}>Cancelar</button>
                     </form>
                   </div>
                 </div>
@@ -766,26 +769,26 @@ function AppMain() {
                               : 'priority-baja'
                             }`}
                           title={proyec.priority}
-                          onClick={() => {setFormData(prev => ({ ...prev, proyect: proyec.proyect })); setShowForm(true);}}
+                          onClick={() => { setFormData(prev => ({ ...prev, proyect: proyec.proyect })); setShowForm(true); }}
                         />
                       )}
 
-                      <td onClick={() => {setFormData(prev => ({ ...prev, proyect: proyec.proyect })); setShowForm(true)}}>
+                      <td onClick={() => { setFormData(prev => ({ ...prev, proyect: proyec.proyect })); setShowForm(true) }}>
                         {editingId === proyec.id ? (
                           <input name='proyect' value={editForm.proyect} onChange={handleEditChange} />
                         ) : (proyec.proyect)}
                       </td>
-                      <td onClick={() => {setFormData(prev => ({ ...prev, proyect: proyec.proyect })); setShowForm(true)}}>
+                      <td onClick={() => { setFormData(prev => ({ ...prev, proyect: proyec.proyect })); setShowForm(true) }}>
                         {editingId === proyec.id ? (
                           <input type='date' name='dateStart' value={editForm.dateStart} onChange={handleEditChange} />
                         ) : (proyec.dateStart)}
                       </td>
-                      <td onClick={() => {setFormData(prev => ({ ...prev, proyect: proyec.proyect })); setShowForm(true)}}>
+                      <td onClick={() => { setFormData(prev => ({ ...prev, proyect: proyec.proyect })); setShowForm(true) }}>
                         {editingId === proyec.id ? (
                           <input type='date' name='dateEnd' value={editForm.dateEnd} onChange={handleEditChange} />
                         ) : (proyec.dateEnd)}
                       </td>
-                      <td onClick={() => {setFormData(prev => ({ ...prev, proyect: proyec.proyect })); setShowForm(true)}}>
+                      <td onClick={() => { setFormData(prev => ({ ...prev, proyect: proyec.proyect })); setShowForm(true) }}>
                         {editingId === proyec.id ? (
                           <textarea name='description' value={editForm.description} onChange={handleEditChange} />
                         ) : (proyec.description)}
@@ -793,20 +796,21 @@ function AppMain() {
                       <td>
                         <div className="cell-actions">
                           <label className='checkbox-button'><input type="checkbox" className='checkbox-button' checked={proyec.completed === 1} onChange={() => updateProyectStatus(proyec.id, Number(proyec.completed) === 1 ? 0 : 1)}></input><span className='custom-checkbox'></span></label>
-
-                          <div className="actions-row">
-                            {editingId === proyec.id ? ( // {infoUser.rol === "Admin" && (
-                              <>
-                                <button className="link-btn" onClick={() => handleSaveEdit(proyec.id)}>Guardar</button>
-                                <button className="link-btn" onClick={() => setEditingId(null)}>Cancelar</button>
-                              </>
-                            ) : (
-                              <>
-                                <button className="link-btn" onClick={() => handleEditClick(proyec)}><Edit size={14} />Editar</button>
-                                <button className="link-btn" onClick={() => handleDeleteProyect(proyec.id)}><Trash2 size={14} />Borrar</button>
-                              </>
-                            )}
-                          </div>
+                          {infoUser.rol === "Admin" && (
+                            <div className="actions-row">
+                              {editingId === proyec.id ? (
+                                <>
+                                  <button className="link-btn" onClick={() => handleSaveEdit(proyec.id)}>Guardar</button>
+                                  <button className="link-btn" onClick={() => setEditingId(null)}>Cancelar</button>
+                                </>
+                              ) : (
+                                <>
+                                  <button className="link-btn" onClick={() => handleEditClick(proyec)}><Edit size={14} />Editar</button>
+                                  <button className="link-btn" onClick={() => handleDeleteProyect(proyec.id)}><Trash2 size={14} />Borrar</button>
+                                </>
+                              )}
+                            </div>
+                          )}
                         </div>
                       </td>
                     </tr>
