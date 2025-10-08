@@ -9,10 +9,13 @@ import com.quiros.gestorProyectos.repository.AppHistoryRepository;
 @Service
 public class AppHistoryDetailsService {
     private final AppHistoryRepository appHistoryRepository;
+    
+    private final AppProyectRepository appProyectRepository;
 
     @Autowired
     public AppHistoryDetailsService(AppHistoryRepository appHistoryRepository) {
         this.appHistoryRepository = appHistoryRepository;
+        this.appProyectRepository = appProyectRepository;
     }
 
     public AppHistory createHistory(String username, String proyect, String task, double hours, String description) {
@@ -24,5 +27,7 @@ public class AppHistoryDetailsService {
         history.setDescription(description);
 
         return appHistoryRepository.save(history);
+
+        appProyectRepository.findById()
     }
 }

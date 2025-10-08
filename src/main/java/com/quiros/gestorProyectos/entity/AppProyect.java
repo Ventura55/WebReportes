@@ -33,6 +33,9 @@ public class AppProyect {
     @Column(name = "descripcion_tarea")
     private String description;
 
+    @Column(name = "horas_tarea")
+    private String hours;
+
     @Column(name = "completar_tarea")
     private int complete;
 
@@ -93,6 +96,14 @@ public class AppProyect {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public double getHours() {
+        return hours;
+    }
+
+    public void setHours() {
+        this.hours = hours;
     }
 
     public int getComplete() {

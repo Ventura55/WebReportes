@@ -104,6 +104,7 @@ function AppMain() {
     dateStart: new Date().toISOString().split("T")[0],
     dateEnd: '',
     description: '',
+    hours: '',
     complete: ''
   });
 
@@ -664,7 +665,7 @@ function AppMain() {
           {mobileMenuOpen && (
             <button className='close-mobile-menu' onClick={() => setMobileMenuOpen(false)}><X /></button>
           )}
-          <button className={active === "proyectos" ? "active" : ""} onClick={() => { setActive("proyectos"); setMobileMenuOpen(false); }}><Calendar />Registro Horas</button>
+          <button className={active === "proyectos" ? "active" : ""} onClick={() => { setActive("proyectos"); setMobileMenuOpen(false); }}><Calendar />Proyectos</button>
           <button className={active === "reportes" ? "active" : ""} onClick={() => { setActive("reportes"); setMobileMenuOpen(false); }}><ClipboardPenLine />Asistencias</button>
         </div>
 
@@ -727,13 +728,13 @@ function AppMain() {
                     <td>Inicio</td>
                     <td>Previsto</td>
                     <td>Descripcion</td>
+                    <td>Horas Totales</td>
                     <td>Completar</td>
-                    <td></td>
                   </tr>
                 </thead>
                 <tbody>
                   {[...filteredProyect, {
-                    id: "87", proyect: "Proyecto de prueba (local)", dateStart: "2025-09-22", dateEnd: "2025-09-30", description: "Solo visible en frontend", completed: 1, priority: "media", subpriority: 1
+                    id: "87", proyect: "Proyecto de prueba (local)", dateStart: "2025-09-22", dateEnd: "2025-09-30", description: "Solo visible en frontend", hours: 12.5, completed: 1, priority: "media", subpriority: 1
                   },
                   {
                     id: "87", proyect: "Proyecto de prueba (local)", dateStart: "2025-09-22", dateEnd: "2025-09-30", description: "Solo visible en frontend", completed: 0, priority: "media", subpriority: 1
@@ -793,6 +794,7 @@ function AppMain() {
                           <textarea name='description' value={editForm.description} onChange={handleEditChange} />
                         ) : (proyec.description)}
                       </td>
+                      <td>{proyec.hours}</td>
                       <td>
                         <div className="cell-actions">
                           <label className='checkbox-button'><input type="checkbox" className='checkbox-button' checked={proyec.completed === 1} onChange={() => updateProyectStatus(proyec.id, Number(proyec.completed) === 1 ? 0 : 1)}></input><span className='custom-checkbox'></span></label>
