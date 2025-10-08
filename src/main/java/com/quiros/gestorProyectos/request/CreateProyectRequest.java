@@ -2,6 +2,7 @@ package com.quiros.gestorProyectos.request;
 
 public class CreateProyectRequest {
     private String priority;
+    private String subPriority;
     private String proyect;
     private String dateStart;
     private String dateEnd;
@@ -29,6 +30,14 @@ public class CreateProyectRequest {
     
      public String getDateStart() {
         return dateStart;
+    }
+
+    public void setSubPriority(String subPriority) {
+        this.subPriority = subPriority;
+    }
+
+    public String getSubPriority() {
+        return subPriority;
     }
 
     public void setDateStart(String dateStart) {

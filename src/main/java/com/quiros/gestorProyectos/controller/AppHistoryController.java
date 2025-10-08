@@ -103,9 +103,8 @@ public class AppHistoryController {
 
     @PostMapping("/create/proyect")
     public ResponseEntity<?> createProyect(@RequestBody CreateProyectRequest request) {
-        AppProyect appProyect = appProyectDetailsService.createProyect(request.getPriority(), request.getProyect(),
-                request.getDateStart(),
-                request.getDateEnd(), request.getDescription(), request.getComplete());
+        AppProyect appProyect = appProyectDetailsService.createProyect(request.getPriority(), request.getSubPriority(), request.getProyect(),
+                request.getDateStart(),request.getDateEnd(), request.getDescription(), request.getComplete());
         return ResponseEntity.ok("El proyecto fue creado, " + appProyect);
     }
 
